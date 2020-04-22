@@ -6,6 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @method static paginate(int $int)
+ * @method static findOrFail(int $id)
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -36,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tasks() {
+        return $this->hasMany('App\Task', 'assigned_to_id');
+    }
+
+    public function project() {
+        return $this->hasOne('App\Project', 'owner_id');
+    }
 }
