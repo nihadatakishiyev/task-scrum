@@ -1,31 +1,20 @@
 <template>
-  <q-layout view="hHh lpR fff">
+  <q-layout view="hHh lpR fFf">
 
-    <q-header reveal elevated class="bg-primary text-white">
+    <q-header reveal bordered class="bg-white text-grey-14">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="left = !left" />
-
         <q-toolbar-title>
           Title
         </q-toolbar-title>
+        <q-space></q-space>
+        <q-btn label="Home" to="/" flat></q-btn>
+        <q-btn label="Second" to="/project/11" class="q-ml-xs" flat></q-btn>
       </q-toolbar>
     </q-header>
-
-    <q-drawer show-if-above v-model="left" side="left" bordered>
-      <!-- drawer content -->
-    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
-
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          Title
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
 
   </q-layout>
 </template>
@@ -34,7 +23,6 @@
 export default {
   data () {
     return {
-      left: false
     }
   }
 }

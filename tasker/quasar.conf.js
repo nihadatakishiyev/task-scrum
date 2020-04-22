@@ -17,7 +17,8 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'composition-api',
-      'axios'
+      'axios',
+      'vue-dragable'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -54,7 +55,10 @@ module.exports = configure(function (ctx) {
       all: 'auto',
 
       components: [],
-      directives: [],
+      directives: [
+        'Mutation',
+        'ClosePopup'
+      ],
 
       // Quasar plugins
       plugins: []
@@ -70,7 +74,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // rtl: false, // https://quasar.dev/options/rtl-support
       // showProgress: false,
