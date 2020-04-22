@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static findOrFail($project_id)
+ */
 class Project extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'description', 'group_id', 'deadline', 'is_completed', 'priority_id'
+        'owner_id', 'name', 'description', 'color_code', 'deadline', 'is_completed'
     ];
 
     public function tasks() {

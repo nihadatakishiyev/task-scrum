@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::all();
         return UserResource::collection($users);
     }
 
@@ -32,7 +32,7 @@ class UserController extends Controller
     {
         $user = $request->isMethod('put') ? User::findOrFail($request->user_id) : new User;
 
-        $user->id = $request->input('user_id');
+//        $user->id = $request->input('user_id');
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('user_id'));
