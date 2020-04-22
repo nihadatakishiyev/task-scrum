@@ -13,7 +13,7 @@
         </q-card>
       </div>
       <div class="col col-xs-12 col-sm-6 col-md-3" v-for="key in data" :key="key">
-        <q-card class="cursor-pointer q-ma-md" flat bordered>
+        <q-card class="cursor-pointer q-ma-md" flat bordered @click="sendMe(key)">
           <q-card-section class="text-center">
             <span class="text-weight-medium text-h6">{{key}}</span> <br/>
             <q-icon name="open_in_new" size="40px"></q-icon>
@@ -72,7 +72,7 @@
               </q-icon>
             </template>
           </q-input>
-          <q-btn label="Create Project" icon="add" class="full-width q-mt-md" color="primary"></q-btn>
+          <q-btn label="Create Project" icon="add"  class="full-width q-mt-md" color="primary"></q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -85,7 +85,7 @@ export default {
   name: 'PageIndex',
   data () {
     return {
-      data: [1, 2, 3, 4, 5],
+      data: [1, 2, 3],
       icon: false,
       project: {
         name: '',
@@ -93,6 +93,11 @@ export default {
         colorCode: '#027be3',
         deadline: ''
       }
+    }
+  },
+  methods: {
+    sendMe (key) {
+      this.$router.push('/projects/' + key)
     }
   }
 }

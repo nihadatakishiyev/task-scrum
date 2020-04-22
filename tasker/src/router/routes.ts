@@ -6,7 +6,12 @@ const routes: RouteConfig[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'project/:projectID', component: () => import('pages/Project.vue') }]
+      { path: 'projects/:projectID', component: () => import('pages/Project.vue') },
+      { path: '/login', component: () => import('pages/Login.vue') },
+      { path: '/register', component: () => import('pages/Register.vue') },
+      { path: '/profile/:profile', component: () => import('pages/Profile.vue') },
+      { path: '/profile', component: () => import('pages/MyProfile.vue') }
+      ]
   }
 ]
 

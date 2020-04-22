@@ -7,8 +7,10 @@
           Title
         </q-toolbar-title>
         <q-space></q-space>
-        <q-btn label="Home" to="/" flat></q-btn>
-        <q-btn label="Second" to="/project/11" class="q-ml-xs" flat></q-btn>
+        <q-btn label="Projects" to="/" flat icon="apps" no-caps></q-btn>
+        <q-btn label="Profile" icon="person_outline" to="/profile" class="q-ml-xs" flat no-caps></q-btn>
+        <q-btn label="Login" icon="person" to="/login" class="q-ml-xs" flat no-caps></q-btn>
+        <q-btn label="Register" icon="person_add" to="/register" class="q-ml-xs" flat no-caps></q-btn>
       </q-toolbar>
     </q-header>
 
