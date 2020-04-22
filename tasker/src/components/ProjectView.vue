@@ -1,5 +1,74 @@
 <template>
   <div>
+    <div class="row">
+      <q-toolbar class="text-primary">
+        <q-toolbar-title>
+          Project Title
+        </q-toolbar-title>
+        <q-btn flat dense icon="menu" @click="drawer = !drawer" label="Menu"/>
+      </q-toolbar>
+      <q-drawer
+        v-model="drawer"
+        :width="350"
+        side="right" overlay bordered behavior="desktop"
+        :breakpoint="500"
+        :content-style="{ backgroundColor: '#eef2f3' }"
+      >
+        <q-scroll-area class="fit">
+          <q-list  >
+            <q-item-label header class="text-center"> <span class="text-weight-bold">Menu</span> <space/> <q-btn flat round icon="close" class="fixed-top-right" @click="drawer = !drawer"></q-btn></q-item-label>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="person" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Made By</q-item-label>
+                <q-item-label caption>
+                  Ogtay Huseynov
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="description" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Description</q-item-label>
+                <q-item-label caption>
+                  Set the content filtering level to restrict
+                  apps that can be downloaded
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="palette" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Color</q-item-label>
+                <q-item-label caption>
+                  Change Background Color
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item-label header class="text-center"> <span class="text-weight-bold">Members</span> <space/></q-item-label>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-avatar  size="32px">
+                  <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Ogtay Huseynov</q-item-label>
+                <q-item-label caption>
+                  okkkkkk@ok.ok
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
+    </div>
       <div class="drag-container row" v-drag-and-drop:options="options">
         <div class="col" v-for="group in groups" :key="group.id" >
           <q-card class="q-ma-md" flat >
@@ -21,7 +90,7 @@
                     <q-item >
                       <q-item-section side>
                         <q-avatar  size="32px">
-                          <img src="https://cdn.quasar.dev/img/avatar.png" />
+                          <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
@@ -168,7 +237,7 @@
           <div class="q-mt-sm-lg">
               <div v-for="(item, index) in items" :key="index" class="q-mt-lg">
                 <span class="text-weight-bold text-grey-14"> Ogtay Huseynov</span> &nbsp;&nbsp;
-                <span class="text-weight-bold text-grey-14">Nov 16, 2018 at 4:29 PM</span>
+                <span class="text-weight-bold text-grey-14">{{item.deadline}}</span>
                 <q-card flat>
                   <q-card-section>
                       ASDASDASDASDASDASDASDASDASDASD ASDASDASDAS ASDASDASDasdasdsa asdasdasdsd
@@ -199,6 +268,7 @@ export default {
       comment: {
         text: ''
       },
+      drawer: false,
       openTask: false,
       selectedTask: null,
       taskd: false,
@@ -222,7 +292,7 @@ export default {
         name: 'ASD',
         groupId: 1,
         description: '123123123',
-        deadline: '',
+        deadline: 'Nov 16, 2018 at 4:29 PM',
         priority_id: 1
       },
       {
@@ -230,7 +300,7 @@ export default {
         name: 'ASDASDASDAS',
         groupId: 2,
         description: 'ASDASDASDA',
-        deadline: '',
+        deadline: 'Nov 16, 2018 at 4:29 PM',
         priority_id: 2
       },
       {
@@ -238,7 +308,7 @@ export default {
         name: '123123123',
         groupId: 3,
         description: 'ASDSAD',
-        deadline: '',
+        deadline: 'Nov 16, 2018 at 4:29 PM',
         priority_id: 2
       }],
       options: {

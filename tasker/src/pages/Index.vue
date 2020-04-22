@@ -96,7 +96,7 @@ export default {
     }
   },
   methods: {
-    sendMe (key) {
+    sendMe (key: string) {
       this.$router.push('/projects/' + key)
     }
   }

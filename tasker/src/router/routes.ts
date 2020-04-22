@@ -10,8 +10,7 @@ const routes: RouteConfig[] = [
       { path: '/login', component: () => import('pages/Login.vue') },
       { path: '/register', component: () => import('pages/Register.vue') },
       { path: '/profile/:profile', component: () => import('pages/Profile.vue') },
-      { path: '/profile', component: () => import('pages/MyProfile.vue') }
-      ]
+      { path: '/profile', component: () => import('pages/MyProfile.vue') }]
   }
 ]
 
