@@ -42,10 +42,10 @@ class User extends Authenticatable
     ];
 
     public function tasks() {
-        return $this->hasMany('app\Task');
+        return $this->hasMany('App\Task', 'assigned_to_id');
     }
 
     public function project() {
-        return $this->hasOne('app\Project');
+        return $this->hasOne('App\Project', 'owner_id');
     }
 }

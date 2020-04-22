@@ -11,10 +11,10 @@ class Project extends Model
     ];
 
     public function tasks() {
-        return $this->hasMany('app\Task');
+        return $this->hasMany('App\Task');
     }
 
     public function user() {
-        return $this->hasOne('app\User');
+        return $this->hasOne('App\User');
     }
 }
