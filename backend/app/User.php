@@ -41,11 +41,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function owner() {
+        return $this->hasOne('App\Task', 'owner_id');
+    }
+
     public function tasks() {
         return $this->hasMany('App\Task', 'assigned_to_id');
     }
 
     public function project() {
-        return $this->hasOne('App\Project', 'owner_id');
+        return $this->hasMany('App\Project', 'owner_id');
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment', 'commenter_id');
     }
 }

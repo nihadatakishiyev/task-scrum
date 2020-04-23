@@ -14,11 +14,15 @@ class Task extends Model
     ];
 
     public function project() {
-        return $this->hasOne('App\Project');
+        return $this->belongsTo('App\Project');
     }
 
     public function user() {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
+    }
+
+    public function assigned_to() {
+        return $this->belongsToMany('App\User', 'users');
     }
 
     public function comments() {
@@ -27,5 +31,9 @@ class Task extends Model
 
     public function priority() {
         return $this->hasOne('App\Priority');
+    }
+
+    public function group() {
+        return $this->belongsTo('App\Group');
     }
 }
