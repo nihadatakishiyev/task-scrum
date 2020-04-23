@@ -56,8 +56,9 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = Task::findOrFail($id);
-        //$task->load('comments');
+        $task = Task::with('comments', 'comments.commenter')->where('id',$id)->get();
+//        $task->load('comments')->with('commenter');
+//        $task->with('comments');
 
         return new TaskResource($task);
     }

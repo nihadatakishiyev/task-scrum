@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class UserSeeder extends Seeder
+class CommentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +11,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 30)->create();
+        factory(App\Comment::class, 60)->create();
     }
 }
