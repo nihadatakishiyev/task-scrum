@@ -50,6 +50,17 @@
               </q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple @click="delete2 = !delete2">
+            <q-item-section avatar>
+              <q-icon color="red" name="delete" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Delete Project</q-item-label>
+              <q-item-label caption>
+                Delete current project perminantly??
+              </q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item-label header class="text-center"> <span class="text-weight-bold">Members</span> <q-space/></q-item-label>
           <q-item clickable v-ripple>
             <q-item-section avatar>
@@ -67,16 +78,43 @@
         </q-list>
       </q-scroll-area>
     </q-drawer>
+    <q-dialog v-model="delete2" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="red" text-color="white" />
+          <span class="q-ml-sm text-weight-bold">Do you really want to delete project??</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn label="Yes" flat color="red" @click="deleteProj(selected)" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
-<script>
+<script>import { mapActions } from 'vuex'
 export default {
+  props: ['project'],
   name: 'ProjectNav',
   data () {
     return {
+      selected: null,
+      delete2: false,
       drawer: false
 
+    }
+  },
+  methods: {
+    ...mapActions('projects', ['deleteProject']),
+    deleteProj (id) {
+      this.deleteProject(this.project.id).then(response => {
+        console.log(response)
+        this.$router.push('/projects')
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
