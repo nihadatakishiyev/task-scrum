@@ -22,15 +22,36 @@ class TaskController extends Controller
         return TaskResource::collection($tasks);
     }
 
+
+    public function update(Request $request, $id) {
+        $task = Task::findOrFail($id);
+
+        $task->owner_id = $request->input('owner_id');
+        $task->assigned_to_id = $request->input('assigned_to_id');
+        $task->name = $request->input('name');
+        $task->description = $request->input('description');
+        $task->group_id = $request->input('group_id');
+        $task->is_completed = $request->input('is_completed');
+        $task->deadline = $request->input('deadline');
+        $task->priority_id = $request->input('priority_id');
+        $task->project_id = $request->input('project_id');
+        $task->label = $request->input('label');
+
+        if($task->save()){
+            return new TaskResource($task);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return TaskResource
      */
+
     public function store(Request $request)
     {
-        $task = $request -> isMethod('put') ? Project::findOrFail($request->task_id) : new Task;
+        $task = new Task;
 
         $task->owner_id = $request->input('owner_id');
         $task->assigned_to_id = $request->input('assigned_to_id');
