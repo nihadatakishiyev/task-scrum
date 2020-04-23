@@ -1,6 +1,6 @@
 <template>
   <q-card class="q-ma-xs  cursor-pointer drag-item" flat bordered @click="clicked">
-    <div :class="colorO(task.priority_id)" style="max-width: 50px; min-height: 10px; border-radius: 5px"></div>
+    <div :class="colorO(parseInt(task.priority_id))" style="max-width: 50px; min-height: 10px; border-radius: 5px"></div>
     <q-card-section>
       {{ task.name }}
       <q-list>
