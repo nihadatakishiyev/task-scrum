@@ -1,26 +1,21 @@
 <template>
-  <q-card class="q-ma-xs  cursor-pointer drag-item" flat bordered @click="clicked">
-    <div :class="colorO(parseInt(task.priority_id))" style="max-width: 50px; min-height: 10px; border-radius: 5px"></div>
+  <q-card class="q-ma-xs  cursor-pointer drag-item" flat bordered @click="clicked"
+          :style="'border-radius: 5px; border-top: 5px solid ' + getSelectedLabelColor(parseInt(task.priority_id)) ">
+    <!--<div :class="colorO(parseInt(task.priority_id))" style=" min-height: 10px; border-radius: 2px"></div>-->
     <q-card-section>
-      {{ task.name }}
-      <q-list>
-        <q-item >
-          <q-item-section side>
-            <q-avatar  size="32px">
-              <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
-            </q-avatar>
-          </q-item-section>
-          <q-item-section>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn dense round flat icon="message">
-              <q-badge color="green" floating transparent>
-                4
-              </q-badge>
-            </q-btn>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <div>
+        <span class="text-weight-bold">{{ task.name }}</span>
+      </div>
+      <div class="q-mt-md">
+        <q-avatar  size="42px">
+          <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
+        </q-avatar>
+        <q-btn dense round size="22px" flat icon="message" color="primary" class=" float-right">
+          <q-badge color="primary" floating transparent>
+            4
+          </q-badge>
+        </q-btn>
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -40,6 +35,9 @@ export default {
     },
     clicked () {
       this.$emit('openTask', this.task)
+    },
+    getSelectedLabelColor (id) {
+      return this.priorityList.filter(item => item.id === id)[0].color
     }
   }
 }
