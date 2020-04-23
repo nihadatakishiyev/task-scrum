@@ -1,7 +1,8 @@
 <template>
   <q-layout view="hHh lpR fFf">
-
     <q-header reveal bordered class="bg-white text-grey-14">
+      <div class="row q-pr-md q-pl-md ">
+
       <q-toolbar>
         <q-toolbar-title>
           Title
@@ -12,8 +13,8 @@
         <q-btn label="Login" icon="person" to="/login" class="q-ml-xs" flat no-caps></q-btn>
         <q-btn label="Register" icon="person_add" to="/register" class="q-ml-xs" flat no-caps></q-btn>
       </q-toolbar>
+      </div>
     </q-header>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -26,6 +27,6 @@ export default {
   data () {
     return {
     }
-  }
+  },
 }
 </script>

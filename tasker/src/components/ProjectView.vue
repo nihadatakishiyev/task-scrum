@@ -1,74 +1,6 @@
-<template>
+<template xmlns:v-drag-and-drop="http://www.w3.org/1999/xhtml">
   <div>
-    <div class="row">
-      <q-toolbar class="text-primary">
-        <q-toolbar-title>
-          Project Title
-        </q-toolbar-title>
-        <q-btn flat dense icon="menu" @click="drawer = !drawer" label="Menu"/>
-      </q-toolbar>
-      <q-drawer
-        v-model="drawer"
-        :width="350"
-        side="right" overlay bordered behavior="desktop"
-        :breakpoint="500"
-        :content-style="{ backgroundColor: '#eef2f3' }"
-      >
-        <q-scroll-area class="fit">
-          <q-list  >
-            <q-item-label header class="text-center"> <span class="text-weight-bold">Menu</span> <space/> <q-btn flat round icon="close" class="fixed-top-right" @click="drawer = !drawer"></q-btn></q-item-label>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="primary" name="person" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Made By</q-item-label>
-                <q-item-label caption>
-                  Ogtay Huseynov
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="primary" name="description" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Description</q-item-label>
-                <q-item-label caption>
-                  Set the content filtering level to restrict
-                  apps that can be downloaded
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="primary" name="palette" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Color</q-item-label>
-                <q-item-label caption>
-                  Change Background Color
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item-label header class="text-center"> <span class="text-weight-bold">Members</span> <space/></q-item-label>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar  size="32px">
-                  <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Ogtay Huseynov</q-item-label>
-                <q-item-label caption>
-                  okkkkkk@ok.ok
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-scroll-area>
-      </q-drawer>
-    </div>
+    <ProjectNav/>
       <div class="drag-container row" v-drag-and-drop:options="options">
         <div class="col" v-for="group in groups" :key="group.id" >
           <q-card class="q-ma-md" flat >
@@ -81,31 +13,10 @@
             </div>
             <q-card-section >
               <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px;" >
-              <q-card class="q-ma-xs  cursor-pointer drag-item"  v-for="(item, index) in filteredItems(group.id)"  :key="index"
-                      :data-id="item.id" flat bordered @click="selectedTask = item; openTask = !openTask">
-                <div :class="colorO(item.priority_id)" style="max-width: 50px; min-height: 10px; border-radius: 5px"></div>
-                <q-card-section>
-                  {{ item.name }}
-                  <q-list>
-                    <q-item >
-                      <q-item-section side>
-                        <q-avatar  size="32px">
-                          <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
-                        </q-avatar>
-                      </q-item-section>
-                      <q-item-section>
-                      </q-item-section>
-                      <q-item-section side>
-                        <q-btn dense round flat icon="message">
-                          <q-badge color="green" floating transparent>
-                            4
-                          </q-badge>
-                        </q-btn>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-card-section>
-              </q-card>
+                <Task class="q-ma-xs  cursor-pointer drag-item"
+                      v-for="(item, index) in filteredItems(group.id)"  :key="index"
+                      :data-id="item.id" :task="item" flat bordered v-on:openTask="selectMTask"
+                />
               </q-scroll-area>
             </q-card-section>
           </q-card>
@@ -177,99 +88,27 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="openTask">
-      <q-card style="min-width: 650px; background-color: #eef2f3">
-        <q-card-section class="row items-center q-pb-none text-center">
-          <div class="text-h6 " v-if="selectedTask !==null">{{selectedTask.name}}</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-        <q-card-section v-if="selectedTask !==null">
-          <q-list bordered class="bg-white">
-            <q-item >
-              <q-item-section avatar>
-                <q-icon color="primary" name="list" />
-              </q-item-section>
-
-              <q-item-section><span class="text-weight-bold">{{getSelectedTaskGroup()}}</span></q-item-section>
-            </q-item>
-            <q-item >
-              <q-item-section avatar>
-                <q-icon color="primary" name="description" />
-              </q-item-section>
-
-              <q-item-section><span class="text-weight-bold">{{selectedTask.description}}</span></q-item-section>
-            </q-item>
-            <q-item >
-              <q-item-section avatar>
-                <q-icon color="primary" name="label" />
-              </q-item-section>
-
-              <q-item-section><q-btn unelevated class="block" :label="getSelectedLabel()" :color="getSelectedLabelColor()" ></q-btn></q-item-section>
-            </q-item>
-            <q-item >
-              <q-item-section avatar>
-                <q-icon color="primary" name="assignment" />
-              </q-item-section>
-
-              <q-item-section><span class="text-weight-bold">Ogtay Huseynov</span></q-item-section>
-            </q-item>
-            <q-item >
-              <q-item-section avatar>
-                <q-icon color="primary" name="timelapse" />
-              </q-item-section>
-
-              <q-item-section><span class="text-weight-bold">Nov 16, 2018 at 4:29 PM</span></q-item-section>
-            </q-item>
-          </q-list>
-        </q-card-section>
-        <q-card-section>
-          <q-input filled bottom-slots v-model="comment.text" label="Make a Comment" counter maxlength="250" >
-            <template v-slot:append>
-              <q-btn round dense flat icon="send" />
-            </template>
-          </q-input>
-        </q-card-section>
-        <q-card-section>
-          <div class="text-center">
-            <span class="text-weight-bold text-grey-14">Comments</span>
-          </div>
-          <div class="q-mt-sm-lg">
-              <div v-for="(item, index) in items" :key="index" class="q-mt-lg">
-                <span class="text-weight-bold text-grey-14"> Ogtay Huseynov</span> &nbsp;&nbsp;
-                <span class="text-weight-bold text-grey-14">{{item.deadline}}</span>
-                <q-card flat>
-                  <q-card-section>
-                      ASDASDASDASDASDASDASDASDASDASD ASDASDASDAS ASDASDASDasdasdsa asdasdasdsd
-                  </q-card-section>
-                </q-card>
-              </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <TaskView :openTask.sync="openTask" :selectedTask.sync="selectedTask"/>
   </div>
 </template>
 
 <script>
 /* eslint-disable @typescript-eslint/camelcase */
-const priorityList = [
-  { id: 1, name: 'Crucial', color: 'red' },
-  { id: 2, name: 'Optional', color: 'green' },
-  { id: 3, name: 'Desirible', color: 'yellow' },
-  { id: 4, name: 'Important', color: 'orange' },
-  { id: 5, name: 'Extra', color: 'blue' }
-]
+import ProjectNav from './ProjectNav'
+import { LocalStorage } from 'quasar'
+import Task from './Task'
+import TaskView from './TaskView'
+
+const priorityList = LocalStorage.getItem('pl')
 export default {
   name: 'SeconCompose',
+  components: { TaskView, Task, ProjectNav },
   data () {
     const updateItemsWithNewGroupId = this.updateItemsWithNewGroupId
     return {
-      comment: {
-        text: ''
+      openTask: {
+        bol: false
       },
-      drawer: false,
-      openTask: false,
       selectedTask: null,
       taskd: false,
       selected: '',
@@ -282,11 +121,7 @@ export default {
         deadline: '',
         priority_id: 1
       },
-      groups: [
-        { id: 1, name: 'To Do' },
-        { id: 2, name: 'In Progress' },
-        { id: 3, name: 'Done' }
-      ],
+      groups: LocalStorage.getItem('gs'),
       items: [{
         id: 1,
         name: 'ASD',
@@ -328,23 +163,22 @@ export default {
     }
   },
   methods: {
-    colorO (id) {
-      return 'bg-' + this.priorityList.filter(item => item.id === id)[0].color + ' q-ma-xs q-ml-md'
-    },
-    getSelectedTaskGroup () {
-      return this.groups.filter(item => item.id === this.selectedTask.groupId)[0].name
-    },
-    getSelectedLabel () {
-      return this.priorityList.filter(item => item.id === this.selectedTask.id)[0].name
-    },
-    getSelectedLabelColor () {
-      return this.priorityList.filter(item => item.id === this.selectedTask.id)[0].color
+    selectMTask (task) {
+      this.selectedTask = task
+      this.openTask.bol = true
     },
     addTask () {
       this.task.groupId = this.selected
       this.task.id = this.items.length + 1
       console.log(this.task)
-      this.items.unshift({ id: this.task.id, name: this.task.name, groupId: this.selected, priority_id: this.task.priority_id })
+      this.items.unshift({
+        id: this.task.id,
+        name: this.task.name,
+        groupId: this.selected,
+        priority_id: this.task.priority_id,
+        description: this.task.description,
+        deadline: this.task.deadline
+      })
       this.taskd = !this.taskd
     },
     updateItemsWithNewGroupId (itemsIds, groupId) {

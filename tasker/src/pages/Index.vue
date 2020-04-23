@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-ma-xl">
+  <q-page class="q-ma-md">
     <div class="row"><div class="col text-center">
       <span class="text-weight-medium text-h4 ">All Projects</span>
     </div></div>

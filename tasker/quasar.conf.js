@@ -18,7 +18,8 @@ module.exports = configure(function (ctx) {
     boot: [
       'composition-api',
       'axios',
-      'vue-dragable'
+      'vue-dragable',
+      'setLocals'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -61,7 +62,10 @@ module.exports = configure(function (ctx) {
       ],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'LocalStorage',
+        'SessionStorage'
+      ]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
