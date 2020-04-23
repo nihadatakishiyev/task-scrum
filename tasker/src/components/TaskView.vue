@@ -1,7 +1,7 @@
 <template>
   <div>
   <q-dialog v-model="openTask.bol">
-    <q-card style="min-width: 650px; background-color: #eef2f3">
+    <q-card style="min-width: 250px; width: 650px; background-color: #eef2f3">
       <q-card-section class="row  q-pb-none text-center ">
         <div class="text-h6 text-center" v-if="selectedTask !==null">{{selectedTask.name}}</div>
         <q-space />
@@ -46,19 +46,7 @@
           </q-item>
         </q-list>
       </q-card-section>
-      <q-card-section>
-        <q-form @submit.prevent="createComment2">
-          <q-input filled bottom-slots v-model="comment.content" label="Make a Comment" counter maxlength="250" required
-                  >
-            <template v-slot:append>
-              <q-btn round dense flat icon="send" type="submit" @click="createComment2"/>
-            </template>
-          </q-input>
-        </q-form>
-      </q-card-section>
-      <q-card-section>
-        <CommentView/>
-      </q-card-section>
+        <CommentView :task="selectedTask"/>
     </q-card>
   </q-dialog>
   </div>
@@ -75,22 +63,11 @@ export default {
   data () {
     return {
       op: this.openTask,
-      comment: {
-        content: ''
-      },
       groups: this.$q.localStorage.getItem('gs'),
       priorityList: this.$q.localStorage.getItem('pl')
     }
   },
   methods: {
-    ...mapActions('comments', ['createComment']),
-    createComment2 () {
-      this.createComment(this.comment).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
-    },
     getSelectedTaskGroup () {
       return this.groups.filter(item => item.id === parseInt(this.selectedTask.group_id))[0].name
     },

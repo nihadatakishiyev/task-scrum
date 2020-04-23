@@ -2,7 +2,7 @@
   <div class="row q-pr-xs q-pl-xs">
     <q-toolbar class="text-primary">
       <q-toolbar-title>
-        Project Title
+        {{project.name}}
       </q-toolbar-title>
       <q-btn flat dense icon="menu" @click="drawer = !drawer" label="Menu"/>
     </q-toolbar>
@@ -34,19 +34,18 @@
             <q-item-section>
               <q-item-label>Description</q-item-label>
               <q-item-label caption>
-                Set the content filtering level to restrict
-                apps that can be downloaded
+                {{project.description}}
               </q-item-label>
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple>
             <q-item-section avatar>
-              <q-icon color="primary" name="palette" />
+              <q-icon :style="'color:' + project.color_code" name="palette" />
             </q-item-section>
             <q-item-section>
               <q-item-label>Color</q-item-label>
               <q-item-label caption>
-                Change Background Color
+                {{project.color_code}}
               </q-item-label>
             </q-item-section>
           </q-item>

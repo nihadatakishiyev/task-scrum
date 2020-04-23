@@ -13,7 +13,7 @@
         </q-card>
       </div>
       <div class="col col-xs-12 col-sm-6 col-md-3" v-for="(proj, index) in projects" :key="index">
-        <q-card class="cursor-pointer q-ma-md" :style="'background-color:' + proj.color_code" flat bordered
+        <q-card class="cursor-pointer q-ma-md" :style="'border-radius: 5px; border-bottom: 5px solid ' + proj.color_code" flat bordered
                 @click="sendMe(proj.id)">
           <q-card-section class="text-center">
             <span class="text-weight-bold text-h6">{{proj.name}}</span> <br/> <br/> <br/>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <q-dialog v-model="icon">
-      <q-card style="min-width: 450px">
+      <q-card style="min-width: 250px; width: 450px">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Create Project</div>
           <q-space />
@@ -105,7 +105,7 @@ export default {
         deadline: ''
       },
       projects: [],
-      load: false
+      load: false,
     }
   },
   methods: {
@@ -127,10 +127,14 @@ export default {
       })
     },
     updateProjects () {
+      this.$q.loading.show()
       this.getProjects('asd').then(response => {
-        this.projects = response.data
-        console.log(this.projects)
+        this.projects = response.data.sort( function (a, b) {
+          return b.created_at < a.created_at ? -1 : 1
+        })
+        this.$q.loading.hide()
       }).catch(error => {
+        this.$q.loading.hide()
         console.log(error)
       })
     }

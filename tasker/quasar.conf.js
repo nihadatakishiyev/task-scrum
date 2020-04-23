@@ -64,7 +64,8 @@ module.exports = configure(function (ctx) {
       // Quasar plugins
       plugins: [
         'LocalStorage',
-        'SessionStorage'
+        'SessionStorage',
+        'Loading'
       ]
     },
 
@@ -93,15 +94,15 @@ module.exports = configure(function (ctx) {
       extendWebpack (cfg) {
         // linting is slow in TS projects, we execute it only for production builds
         if (ctx.prod) {
-          cfg.module.rules.push({
-            enforce: 'pre',
-            test: /\.(js|vue)$/,
-            loader: 'eslint-loader',
-            exclude: /node_modules/,
-            options: {
-              formatter: require('eslint').CLIEngine.getFormatter('stylish')
-            }
-          })
+          // cfg.module.rules.push({
+          //   enforce: 'pre',
+          //   test: /\.(js|vue)$/,
+          //   loader: 'eslint-loader',
+          //   exclude: /node_modules/,
+          //   options: {
+          //     formatter: require('eslint').CLIEngine.getFormatter('stylish')
+          //   }
+          // })
         }
       }
     },
