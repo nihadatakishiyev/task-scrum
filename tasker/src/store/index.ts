@@ -3,6 +3,10 @@ import Vuex from 'vuex'
 
 // import example from './module-example'
 // import exampleState from './module-example/state'
+import auth from './auth'
+import tasks from './tasks'
+import comments from './comments'
+import projects from './projects'
 
 /*
  * If not building with SSR mode, you can
@@ -21,6 +25,10 @@ export default store(function ({ Vue }) {
   const Store = new Vuex.Store({
     modules: {
       // example
+      auth,
+      comments,
+      projects,
+      tasks
     },
 
     // enable strict mode (adds overhead!)

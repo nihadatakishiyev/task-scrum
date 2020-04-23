@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-ma-xl">
+  <q-page class="q-ma-md">
     <div class="row"><div class="col text-center">
       <span class="text-weight-medium text-h4 ">All Projects</span>
     </div></div>
@@ -12,11 +12,11 @@
           </q-card-section>
         </q-card>
       </div>
-      <div class="col col-xs-12 col-sm-6 col-md-3" v-for="key in data" :key="key">
-        <q-card class="cursor-pointer q-ma-md" flat bordered @click="sendMe(key)">
+      <div class="col col-xs-12 col-sm-6 col-md-3" v-for="(proj, index) in projects" :key="index">
+        <q-card class="cursor-pointer q-ma-md" :style="'background-color:' + proj.color_code" flat bordered
+                @click="sendMe(proj.id)">
           <q-card-section class="text-center">
-            <span class="text-weight-medium text-h6">{{key}}</span> <br/>
-            <q-icon name="open_in_new" size="40px"></q-icon>
+            <span class="text-weight-bold text-h6 text-white">{{proj.name}}</span> <br/> <br/> <br/>
           </q-card-section>
         </q-card>
       </div>
@@ -30,32 +30,35 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input outlined v-model="project.name" label="Name" />
+          <q-form @submit.prevent="cProject">
+          <q-input outlined v-model="project.name" label="Name" required />
           <q-input
             v-model="project.description"
             outlined
             class="q-pt-sm"
             label="Description"
             type="textarea"
+            required
           ></q-input>
 
           <q-input
             outlined
             label="Color Code of Project"
-            v-model="project.colorCode"
+            v-model="project.color_code"
             :rules="['anyColor']"
             class="my-input q-pt-sm"
+            required
           >
             <template v-slot:append>
               <q-icon name="colorize" class="cursor-pointer">
                 <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-color v-model="project.colorCode" />
+                  <q-color v-model="project.color_code" />
                 </q-popup-proxy>
               </q-icon>
             </template>
           </q-input>
 
-          <q-input outlined v-model="project.deadline" label="Optional Deadline">
+          <q-input outlined v-model="project.deadline" label="Optional Deadline" required>
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -72,14 +75,20 @@
               </q-icon>
             </template>
           </q-input>
-          <q-btn label="Create Project" icon="add"  class="full-width q-mt-md" color="primary"></q-btn>
+          <q-btn label="Create Project" type="submit" icon="add" :loading="load" class="full-width q-mt-md" color="primary"></q-btn>
+          </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
+
+
   </q-page>
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/camelcase */
+
+import { mapActions } from 'vuex'
 
 export default {
   name: 'PageIndex',
@@ -88,17 +97,44 @@ export default {
       data: [1, 2, 3],
       icon: false,
       project: {
+        owner_id: 5,
         name: '',
         description: '',
-        colorCode: '#027be3',
+        color_code: '#027be3',
         deadline: ''
-      }
+      },
+      projects: [],
+      load: false
     }
   },
   methods: {
+    ...mapActions('projects', ['createProject', 'getProjects']),
     sendMe (key: string) {
       this.$router.push('/projects/' + key)
+    },
+    cProject () {
+      this.load = true
+      this.createProject(this.project).then(response => {
+        this.load = false
+        this.icon = false
+        this.updateProjects()
+        console.log(response)
+      }).catch(error => {
+        this.load = false
+        this.icon = false
+        console.log(error)
+      })
+    },
+    updateProjects () {
+      this.getProjects('asd').then(response => {
+        this.projects = response.data
+      }).catch(error => {
+        console.log(error)
+      })
     }
+  },
+  created () {
+    this.updateProjects()
   }
 }
 </script>

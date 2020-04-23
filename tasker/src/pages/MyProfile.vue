@@ -63,7 +63,7 @@
                     :events="eventsFn"
                     minimal
                     class="full-width"
-                  />
+                  ></q-date>
                 </q-tab-panel>
               </q-tab-panels>
             </q-card>
