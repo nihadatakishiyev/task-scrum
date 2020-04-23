@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $fillable = [
-        'owner_id', 'assigned_to_id', 'name', 'description', 'group_id', 'deadline', 'is_completed', 'priority_id', 'project_id', 'label'
+        'name', 'description', 'owner_id', 'assigned_to_id', 'project_id', 'priority_id', 'group_id', 'deadline', 'is_completed', 'label'
     ];
 
     public function project() {
@@ -19,5 +19,13 @@ class Task extends Model
 
     public function user() {
         return $this->hasOne('App\User');
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment', 'task_id');
+    }
+
+    public function priority() {
+        return $this->hasOne('App\Priority');
     }
 }
