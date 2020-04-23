@@ -15,14 +15,16 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->references('id')->on('users');
-            $table->foreignId('assigned_to_id')->references('id')->on('users');
             $table->string('name');
             $table->string('description');
-            $table->integer('group_id');
+            $table->string('label');
+            $table->foreignId('owner_id')->references('id')->on('users');
+            $table->foreignId('assigned_to_id')->references('id')->on('users');
+            $table->foreignId('project_id')->references('id')->on('projects');
+            $table->foreignId('priority_id')->references('id')->on('priorities');
+            $table->foreignId('group_id')->references('id')->on('groups');
             $table->timestamp('deadline');
             $table->boolean('is_completed')->default(0);
-            $table->integer('priority_id')->default(1);
             $table->timestamps();
         });
     }

@@ -10,14 +10,30 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $fillable = [
-        'owner_id', 'assigned_to_id', 'name', 'description', 'group_id', 'deadline', 'is_completed', 'priority_id', 'project_id', 'label'
+        'name', 'description', 'owner_id', 'assigned_to_id', 'project_id', 'priority_id', 'group_id', 'deadline', 'is_completed', 'label'
     ];
 
     public function project() {
-        return $this->hasOne('App\Project');
+        return $this->belongsTo('App\Project');
     }
 
     public function user() {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
+    }
+
+    public function assigned_to() {
+        return $this->belongsToMany('App\User', 'users');
+    }
+
+    public function comments() {
+        return $this->hasMany('App\Comment', 'task_id');
+    }
+
+    public function priority() {
+        return $this->hasOne('App\Priority');
+    }
+
+    public function group() {
+        return $this->belongsTo('App\Group');
     }
 }
