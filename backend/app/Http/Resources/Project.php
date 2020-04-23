@@ -14,17 +14,17 @@ class Project extends JsonResource
      */
     public function toArray($request)
     {
-//       return parent::toArray($request);
-        return [
-            'id' =>$this->id,
-            'owner_id' =>(int)($this->owner_id),
-            'name' => $this->name,
-            'description' =>$this->description,
-            'color_code' => $this->color_code,
-            'is_completed' =>(int)($this->completed),
-            'deadline' => $this->deadline,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
-        ];
+       return parent::toArray($request);
+//        return [
+//            'id' =>$this->id,
+//            'owner_id' =>(int)($this->owner_id),
+//            'name' => $this->name,
+//            'description' =>$this->description,
+//            'color_code' => $this->color_code,
+//            'is_completed' =>(int)($this->completed),
+//            'deadline' => $this->deadline,
+//            'created_at' => $this->created_at,
+//            'updated_at' => $this->updated_at
+//        ];
     }
 }
