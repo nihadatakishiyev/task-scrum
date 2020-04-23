@@ -17,6 +17,9 @@
       </div>
       <div class="q-mt-sm-lg">
         <div v-for="(item, index) in comments" :key="index" class="q-mt-lg">
+          <q-avatar  size="32px">
+            <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
+          </q-avatar>
           <span class="text-weight-bold text-grey-14"> {{item.commenter.name}}</span> &nbsp;&nbsp;
           <span class="text-weight-bold text-grey-14 float-right">{{formatDates(item.created_at)}}</span>
           <q-card flat>
@@ -55,7 +58,6 @@ export default {
       this.$q.loading.show()
 
       this.getComments(this.task.id).then(response => {
-        console.log(response)
         this.comments = response.data[0].comments.sort( function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
@@ -68,12 +70,15 @@ export default {
       })
     },
     createComment2 () {
+      this.$q.loading.show()
+
       this.createComment(this.comment).then(response => {
         this.comment.task_id = this.task.id
-        console.log(this.comment)
+        this.comment.content = null
         this.getComments2()
         console.log(response)
       }).catch(error => {
+        this.comment.content = null
         console.log(error)
       })
     }

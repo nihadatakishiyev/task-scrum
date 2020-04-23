@@ -12,7 +12,7 @@ export default boot(({ Vue }) => {
   const groups = [
     { id: 1, name: 'To Do' },
     { id: 2, name: 'In Progress' },
-    { id: 3, name: 'Done' }
+    { id: 3, name: 'Done' },
   ]
   LocalStorage.set('pl', priorityList)
   LocalStorage.set('gs', groups)

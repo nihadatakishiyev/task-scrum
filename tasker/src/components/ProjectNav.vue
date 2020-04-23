@@ -22,8 +22,8 @@
             </q-item-section>
             <q-item-section>
               <q-item-label>Made By</q-item-label>
-              <q-item-label caption>
-                Ogtay Huseynov
+              <q-item-label class="text-weight-bold" v-if="project.owner">
+                {{project.owner.name}}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -110,7 +110,7 @@ export default {
     deleteProj (id) {
       this.deleteProject(this.project.id).then(response => {
         console.log(response)
-        this.$router.push('/projects')
+        this.$router.push('/')
       }).catch(error => {
         console.log(error)
       })
