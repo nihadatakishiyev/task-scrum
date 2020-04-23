@@ -30,13 +30,15 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input outlined v-model="project.name" label="Name" />
+          <q-form @submit.prevent="cProject">
+          <q-input outlined v-model="project.name" label="Name" required />
           <q-input
             v-model="project.description"
             outlined
             class="q-pt-sm"
             label="Description"
             type="textarea"
+            required
           ></q-input>
 
           <q-input
@@ -45,6 +47,7 @@
             v-model="project.colorCode"
             :rules="['anyColor']"
             class="my-input q-pt-sm"
+            required
           >
             <template v-slot:append>
               <q-icon name="colorize" class="cursor-pointer">
@@ -55,7 +58,7 @@
             </template>
           </q-input>
 
-          <q-input outlined v-model="project.deadline" label="Optional Deadline">
+          <q-input outlined v-model="project.deadline" label="Optional Deadline" required>
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -72,7 +75,8 @@
               </q-icon>
             </template>
           </q-input>
-          <q-btn label="Create Project" icon="add"  class="full-width q-mt-md" color="primary"></q-btn>
+          <q-btn label="Create Project" type="submit" icon="add"  class="full-width q-mt-md" color="primary"></q-btn>
+          </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -80,6 +84,7 @@
 </template>
 
 <script lang="ts">
+  import { mapActions } from 'vuex'
 
 export default {
   name: 'PageIndex',
@@ -96,8 +101,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions('projects', ['createProject']),
     sendMe (key: string) {
       this.$router.push('/projects/' + key)
+    },
+    cProject () {
+      this.createProject(this.project).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

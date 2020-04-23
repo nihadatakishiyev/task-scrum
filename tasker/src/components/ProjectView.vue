@@ -31,8 +31,10 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input outlined v-model="task.name" label="Name" />
+          <q-form @submit.prevent="submitTask">
+          <q-input outlined v-model="task.name" label="Name" required/>
           <q-input
+            required
             v-model="task.description"
             outlined
             class="q-pt-sm"
@@ -41,6 +43,7 @@
           ></q-input>
 
           <q-select
+            required
             outlined
             class="q-pt-sm"
             v-model="task.priority_id"
@@ -65,7 +68,7 @@
             </template>
           </q-select>
 
-          <q-input outlined v-model="task.deadline" label="Optional Deadline" class="q-pt-sm"
+          <q-input outlined v-model="task.deadline" label="Optional Deadline" class="q-pt-sm" required
           >
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">
@@ -84,11 +87,12 @@
             </template>
           </q-input>
           <q-btn label="Create Project" icon="add" class="full-width q-mt-md" color="primary"
-          @click="addTask"></q-btn>
+          @click="addTask" type submit></q-btn>
+          </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
-    <TaskView :openTask.sync="openTask" :selectedTask.sync="selectedTask"/>
+    <TaskView :openTask.sync="openTask" :selectedTask="selectedTask"/>
   </div>
 </template>
 

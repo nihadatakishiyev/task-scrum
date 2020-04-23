@@ -2,8 +2,8 @@
   <div>
   <q-dialog v-model="openTask.bol">
     <q-card style="min-width: 650px; background-color: #eef2f3">
-      <q-card-section class="row items-center q-pb-none text-center">
-        <div class="text-h6 " v-if="selectedTask !==null">{{selectedTask.name}}</div>
+      <q-card-section class="row  q-pb-none text-center ">
+        <div class="text-h6 text-center" v-if="selectedTask !==null">{{selectedTask.name}}</div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
@@ -47,7 +47,7 @@
         </q-list>
       </q-card-section>
       <q-card-section>
-        <q-input filled bottom-slots v-model="comment.text" label="Make a Comment" counter maxlength="250" >
+        <q-input filled bottom-slots v-model="comment.content" label="Make a Comment" counter maxlength="250" >
           <template v-slot:append>
             <q-btn round dense flat icon="send" />
           </template>
@@ -62,7 +62,9 @@
 </template>
 
 <script>
-import CommentView from './ComentView'
+  /* eslint-disable @typescript-eslint/camelcase */
+
+  import CommentView from './ComentView'
 export default {
   name: 'TaskView',
   components: { CommentView },
@@ -71,7 +73,8 @@ export default {
     return {
       op: this.openTask,
       comment: {
-        text: ''
+        task_id: this.selectedTask.id,
+        content: ''
       },
       groups: this.$q.localStorage.getItem('gs'),
       priorityList: this.$q.localStorage.getItem('pl')
