@@ -1,6 +1,6 @@
 <template xmlns:v-drag-and-drop="http://www.w3.org/1999/xhtml">
   <div>
-    <ProjectNav />
+    <ProjectNav :project="currentProject"/>
     <q-scroll-area
       horizontal
       style="height: 500px; width: 100%"

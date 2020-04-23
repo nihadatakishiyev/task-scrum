@@ -2,7 +2,7 @@
   <div class="row q-pr-xs q-pl-xs">
     <q-toolbar class="text-primary">
       <q-toolbar-title>
-        Project Title
+        {{project.name}}
       </q-toolbar-title>
       <q-btn flat dense icon="menu" @click="drawer = !drawer" label="Menu"/>
     </q-toolbar>
