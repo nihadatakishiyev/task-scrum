@@ -1,7 +1,7 @@
 <template>
   <div>
   <q-dialog v-model="openTask.bol">
-    <q-card style="min-width: 650px; background-color: #eef2f3">
+    <q-card style="min-width: 250px; width: 650px; background-color: #eef2f3">
       <q-card-section class="row  q-pb-none text-center ">
         <div class="text-h6 text-center" v-if="selectedTask !==null">{{selectedTask.name}}</div>
         <q-space />

@@ -18,7 +18,7 @@
       <div class="q-mt-sm-lg">
         <div v-for="(item, index) in comments" :key="index" class="q-mt-lg">
           <span class="text-weight-bold text-grey-14"> {{item.commenter.name}}</span> &nbsp;&nbsp;
-          <span class="text-weight-bold text-grey-14">{{item.created_at}}</span>
+          <span class="text-weight-bold text-grey-14 float-right">{{formatDates(item.created_at)}}</span>
           <q-card flat>
             <q-card-section>
               {{item.content}}
@@ -33,7 +33,7 @@
 
 <script>
 /* eslint-disable @typescript-eslint/camelcase */
-
+import { date } from 'quasar'
 import { mapActions } from 'vuex'
 export default {
   name: 'CommentView',
@@ -52,12 +52,18 @@ export default {
   methods: {
     ...mapActions('comments', ['getComments', 'createComment']),
     getComments2 () {
+      this.$q.loading.show()
+
       this.getComments(this.task.id).then(response => {
         console.log(response)
-        this.comments = response.data[0].comments.sort ( function (a, b) {
+        this.comments = response.data[0].comments.sort( function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
+        this.$q.loading.hide()
+
       }).catch(error => {
+        this.$q.loading.hide()
+
         console.log(error)
       })
     },
@@ -74,6 +80,11 @@ export default {
   },
   created () {
     this.getComments2()
+  },
+  computed: {
+    formatDates () {
+      return timeStamp => date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    }
   }
 }
 </script>

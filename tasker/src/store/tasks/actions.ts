@@ -13,7 +13,7 @@ export function createTask({commit}, payload) {
 }
 export function updateTask({commit}, payload) {
   return new Promise ((res, rej) => {
-    this._vm.$axios.put('/tasks',
+    this._vm.$axios.put('/tasks/' + payload.id,
       payload
     )
       .then(function (response) {

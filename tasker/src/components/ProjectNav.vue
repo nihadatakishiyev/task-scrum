@@ -34,19 +34,18 @@
             <q-item-section>
               <q-item-label>Description</q-item-label>
               <q-item-label caption>
-                Set the content filtering level to restrict
-                apps that can be downloaded
+                {{project.description}}
               </q-item-label>
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple>
             <q-item-section avatar>
-              <q-icon color="primary" name="palette" />
+              <q-icon :style="'color:' + project.color_code" name="palette" />
             </q-item-section>
             <q-item-section>
               <q-item-label>Color</q-item-label>
               <q-item-label caption>
-                Change Background Color
+                {{project.color_code}}
               </q-item-label>
             </q-item-section>
           </q-item>

@@ -28,7 +28,7 @@
       </div>
     </q-scroll-area>
     <q-dialog v-model="taskd">
-      <q-card style="min-width: 450px">
+      <q-card style="min-width: 250px; width: 450px;">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Create Task</div>
           <q-space />
@@ -166,8 +166,9 @@ export default {
       this.createTask(this.task).then(response => {
         console.log(this.task.g)
         this.getCurrentProject()
-        this.openTask.bol = false
+        this.taskd = false
       }).catch(error => {
+        this.taskd = false
         console.log(error)
       })
     },
@@ -189,10 +190,13 @@ export default {
         })
     },
     getCurrentProject () {
+      this.$q.loading.show()
       this.getProject(this.currentID).then(response => {
+        this.$q.loading.hide()
         this.currentProject = response.data[0]
         this.tasks = response.data[0].tasks
       }).catch(error => {
+        this.$q.loading.hide()
         console.log(error)
       })
     }
