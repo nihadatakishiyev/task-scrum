@@ -15,8 +15,8 @@ class CreateUserPermissionsTable extends Migration
     {
         Schema::create('user_permissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('project_id')->references('id')->on('projects');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->integer('permission_type_id')->default(2);
 //            $table->foreignId('permission_type_id')->references('id')->on('list_permissions');
             $table->timestamps();

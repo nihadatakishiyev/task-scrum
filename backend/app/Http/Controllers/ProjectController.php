@@ -66,8 +66,9 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::findOrFail($id);
-        $project->load('tasks');
+        $project = Project::with('owner', 'tasks')->where('id', $id)->get();
+//        $project->load('tasks');
+//        dd($project);
 
         return new ProjectResource($project);
     }
