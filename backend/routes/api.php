@@ -68,3 +68,4 @@ Route::resource('users', 'UserController');
 Route::resource('projects', 'ProjectController');
 Route::resource('tasks', 'TaskController');
 Route::resource('comments', 'CommentController');
+Route::resource('ups', 'UserPermissionController');
