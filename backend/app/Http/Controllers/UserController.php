@@ -22,15 +22,27 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
+    public function update(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('user_id'));
+
+        if ($user->save()) {
+            return new UserResource($user);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return UserResource
      */
     public function store(Request $request)
     {
-        $user = $request->isMethod('put') ? User::findOrFail($request->user_id) : new User;
+        $user = new User;
 
 //        $user->id = $request->input('user_id');
         $user->name = $request->input('name');

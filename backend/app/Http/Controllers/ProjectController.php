@@ -21,6 +21,21 @@ class ProjectController extends Controller
         return ProjectResource::collection($projects);
     }
 
+    public function update(Request $request, $id) {
+        $project = Project::findOrFail($id);
+
+        $project->owner_id = $request->input('owner_id');
+        $project->name = $request->input('name');
+        $project->description = $request->input('description');
+        $project->color_code = $request->input('color_code');
+        $project->is_completed = $request->input('is_completed');
+        $project->deadline = $request->input('deadline');
+
+        if($project->save()){
+            return new ProjectResource($project);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -29,7 +44,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $project = $request -> isMethod('put') ? Project::findOrFail($request->project_id) : new Project;
+        $project = new Project;
 
         $project->owner_id = $request->input('owner_id');
         $project->name = $request->input('name');

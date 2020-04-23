@@ -21,6 +21,19 @@ class CommentController extends Controller
         return CommentResource::collection($comment);
     }
 
+    public function update(Request $request, $id) {
+        $comment =  Comment::findOrFail($id);
+
+        $comment->task_id = $request->input('task_id');
+        $comment->commenter_id = $request->input('commenter_id');
+        $comment->content = $request->input('content');
+        $comment->is_deleted = $request->input('is_deleted');
+
+        if($comment->save()){
+            return new CommentResource($comment);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -29,7 +42,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $comment = $request -> isMethod('put') ? Comment::findOrFail($request->comment_id) : new Comment;
+        $comment = new Comment;
 
         $comment->task_id = $request->input('task_id');
         $comment->commenter_id = $request->input('commenter_id');
