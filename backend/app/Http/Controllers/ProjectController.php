@@ -66,9 +66,10 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::with('owner', 'tasks')->where('id', $id)->get();
-//        $project->load('tasks');
-//        dd($project);
+//        $project = Project::with('owner','tasks', 'tasks.comments')->where('id', $id)->get();
+        $project = Project::with(['tasks' => function($query){
+            $query->withCount('comments');
+        }, 'owner'])->where('id', $id)->get();
 
         return new ProjectResource($project);
     }
