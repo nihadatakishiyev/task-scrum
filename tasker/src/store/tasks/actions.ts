@@ -1,4 +1,4 @@
-export function createTast({commit}, payload) {
+export function createTask({commit}, payload) {
   return new Promise((res, rej) => {
     try {
       res(payload)

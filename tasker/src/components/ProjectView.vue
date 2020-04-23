@@ -1,8 +1,12 @@
 <template xmlns:v-drag-and-drop="http://www.w3.org/1999/xhtml">
   <div>
     <ProjectNav/>
-      <div class="drag-container row" v-drag-and-drop:options="options">
-        <div class="col" v-for="group in groups" :key="group.id" >
+    <q-scroll-area
+      horizontal
+      style="height: 500px; width: 100%"
+    >
+      <div class="drag-container row no-wrap" v-drag-and-drop:options="options">
+        <div class="col " v-for="group in groups" :key="group.id" >
           <q-card class="q-ma-md" flat >
             <div class="text-center text-weight-bold text-h5 q-pt-sm">
               <span>{{group.name}}</span>
@@ -12,16 +16,17 @@
               @click="taskd = !taskd; selected= group.id"></q-btn>
             </div>
             <q-card-section >
-              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px;" >
+              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px; width: 380px" >
                 <Task class="q-ma-xs  cursor-pointer drag-item"
                       v-for="(item, index) in filteredItems(group.id)"  :key="index"
-                      :data-id="item.id" :task="item" flat bordered v-on:openTask="selectMTask"
+                      :data-id="item.id" :task="item" v-on:openTask="selectMTask"
                 />
               </q-scroll-area>
             </q-card-section>
           </q-card>
         </div>
       </div>
+    </q-scroll-area>
     <q-dialog v-model="taskd">
       <q-card style="min-width: 450px">
         <q-card-section class="row items-center q-pb-none">
@@ -86,8 +91,8 @@
               </q-icon>
             </template>
           </q-input>
-          <q-btn label="Create Project" icon="add" class="full-width q-mt-md" color="primary"
-          @click="addTask" type submit></q-btn>
+          <q-btn label="Create Task" icon="add" class="full-width q-mt-md" color="primary"
+          type="submit"></q-btn>
           </q-form>
         </q-card-section>
       </q-card>
@@ -102,7 +107,7 @@ import ProjectNav from './ProjectNav'
 import { LocalStorage } from 'quasar'
 import Task from './Task'
 import TaskView from './TaskView'
-
+import { mapActions } from 'vuex'
 const priorityList = LocalStorage.getItem('pl')
 export default {
   name: 'SeconCompose',
@@ -167,6 +172,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions('tasks', ['createTask']),
+    submitTask () {
+      this.createTask(this.task).then(response => {
+        console.log(response)
+        this.addTask()
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     selectMTask (task) {
       this.selectedTask = task
       this.openTask.bol = true

@@ -47,11 +47,14 @@
         </q-list>
       </q-card-section>
       <q-card-section>
-        <q-input filled bottom-slots v-model="comment.content" label="Make a Comment" counter maxlength="250" >
-          <template v-slot:append>
-            <q-btn round dense flat icon="send" />
-          </template>
-        </q-input>
+        <q-form @submit.prevent="createComment2">
+          <q-input filled bottom-slots v-model="comment.content" label="Make a Comment" counter maxlength="250" required
+                  >
+            <template v-slot:append>
+              <q-btn round dense flat icon="send" type="submit" @click="createComment2"/>
+            </template>
+          </q-input>
+        </q-form>
       </q-card-section>
       <q-card-section>
         <CommentView/>
@@ -62,9 +65,9 @@
 </template>
 
 <script>
-  /* eslint-disable @typescript-eslint/camelcase */
-
-  import CommentView from './ComentView'
+/* eslint-disable @typescript-eslint/camelcase */
+import { mapActions } from 'vuex'
+import CommentView from './ComentView'
 export default {
   name: 'TaskView',
   components: { CommentView },
@@ -73,7 +76,6 @@ export default {
     return {
       op: this.openTask,
       comment: {
-        task_id: this.selectedTask.id,
         content: ''
       },
       groups: this.$q.localStorage.getItem('gs'),
@@ -81,6 +83,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions('comments', ['createComment']),
+    createComment2 () {
+      this.createComment(this.comment).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     getSelectedTaskGroup () {
       return this.groups.filter(item => item.id === this.selectedTask.groupId)[0].name
     },
@@ -90,9 +100,6 @@ export default {
     getSelectedLabelColor () {
       return this.priorityList.filter(item => item.id === this.selectedTask.priority_id)[0].color
     }
-  },
-  mounted () {
-    console.log(this.selectedTask)
   }
 }
 </script>

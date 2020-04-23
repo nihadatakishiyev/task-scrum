@@ -5,7 +5,7 @@
 
       <q-toolbar>
         <q-toolbar-title>
-          Title
+          TaskManager
         </q-toolbar-title>
         <q-space></q-space>
         <q-btn label="Projects" to="/" flat icon="apps" no-caps></q-btn>
