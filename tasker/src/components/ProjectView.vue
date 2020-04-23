@@ -16,11 +16,11 @@
               @click="taskd = !taskd; selected= group.id"></q-btn>
             </div>
             <q-card-section >
-              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px; width: 380px" >
+              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px; width: 380px" v-if="tasks">
                 <Task class="q-ma-xs  cursor-pointer drag-item"
-                      v-for="(item, index) in filteredItems(group.id)"  :key="index"
-                      :data-id="item.id" :task="item" v-on:openTask="selectMTask"
-                />
+                        v-for="(item, index) in filteredItems(group.id)"  :key="index"
+                        :data-id="item.id" :task="item" v-on:openTask="selectMTask"
+              />
               </q-scroll-area>
             </q-card-section>
           </q-card>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/camelcase,camelcase */
 import ProjectNav from './ProjectNav'
 import { LocalStorage } from 'quasar'
 import Task from './Task'
@@ -115,6 +115,8 @@ export default {
   data () {
     const updateItemsWithNewGroupId = this.updateItemsWithNewGroupId
     return {
+      currentID: '',
+      currentProject: [],
       openTask: {
         bol: false
       },
@@ -125,41 +127,24 @@ export default {
       task: {
         id: '',
         name: '',
-        groupId: '',
+        assigned_to_id: 1,
+        owner_id: 1,
+        label: 'Programming',
+        is_completed: 0,
+        project_id: this.currentID,
+        group_id: '',
         description: '',
         deadline: '',
         priority_id: 1
       },
       groups: LocalStorage.getItem('gs'),
-      items: [{
-        id: 1,
-        name: 'ASD',
-        groupId: 1,
-        description: '123123123',
-        deadline: 'Nov 16, 2018 at 4:29 PM',
-        priority_id: 1
-      },
-      {
-        id: 2,
-        name: 'ASDASDASDAS',
-        groupId: 2,
-        description: 'ASDASDASDA',
-        deadline: 'Nov 16, 2018 at 4:29 PM',
-        priority_id: 2
-      },
-      {
-        id: 3,
-        name: '123123123',
-        groupId: 3,
-        description: 'ASDSAD',
-        deadline: 'Nov 16, 2018 at 4:29 PM',
-        priority_id: 2
-      }],
+      tasks: [],
       options: {
         dropzoneSelector: '.drag-inner-list',
         draggableSelector: '.drag-item',
         onDrop (e) {
           const targetGroupId = parseInt(e.droptarget.dataset.id)
+          console.log(targetGroupId)
           const itemIds = e.items.map(item => parseInt(item.dataset.id))
           updateItemsWithNewGroupId(itemIds, targetGroupId)
         }
@@ -168,15 +153,20 @@ export default {
   },
   computed: {
     filteredItems () {
-      return groupId => this.items.filter(item => item.groupId === groupId)
+      return group_id => this.tasks.filter(item => parseInt(item.group_id) === group_id)
     }
   },
   methods: {
-    ...mapActions('tasks', ['createTask']),
+    ...mapActions('projects', ['getProject']),
+    ...mapActions('tasks', ['createTask', 'updateTask']),
     submitTask () {
+      this.task.group_id = this.selected
+      this.task.project_id = this.currentID
+      console.log(this.task)
       this.createTask(this.task).then(response => {
-        console.log(response)
-        this.addTask()
+        console.log(this.task.g)
+        this.getCurrentProject()
+        this.openTask.bol = false
       }).catch(error => {
         console.log(error)
       })
@@ -185,27 +175,31 @@ export default {
       this.selectedTask = task
       this.openTask.bol = true
     },
-    addTask () {
-      this.task.groupId = this.selected
-      this.task.id = this.items.length + 1
-      console.log(this.task)
-      this.items.unshift({
-        id: this.task.id,
-        name: this.task.name,
-        groupId: this.selected,
-        priority_id: this.task.priority_id,
-        description: this.task.description,
-        deadline: this.task.deadline
-      })
-      this.taskd = !this.taskd
-    },
     updateItemsWithNewGroupId (itemsIds, groupId) {
-      this.items
+      this.tasks
         .filter(item => itemsIds.indexOf(item.id) >= 0)
         .forEach(item => {
-          item.groupId = groupId
+          item.group_id = groupId
+          console.log(item)
+          this.updateTask(item).then(response => {
+            console.log(response)
+          }).catch(error => {
+            console.log(error)
+          })
         })
+    },
+    getCurrentProject () {
+      this.getProject(this.currentID).then(response => {
+        this.currentProject = response.data[0]
+        this.tasks = response.data[0].tasks
+      }).catch(error => {
+        console.log(error)
+      })
     }
+  },
+  created () {
+    this.currentID = this.$route.params.projectID
+    this.getCurrentProject()
   }
 }
 </script>

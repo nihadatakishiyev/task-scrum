@@ -25,6 +25,19 @@ export function getProjects({commit}, payload) {
              })
   })
 }
+export function getProject({commit}, payload) {
+  return new Promise((res, rej) => {
+    this._vm.$axios.get('/projects/' + payload,
+      payload
+    )
+      .then(function (response) {
+        res(response)
+      })
+      .catch(function (error) {
+        rej(error.response)
+      })
+  })
+}
 export function deleteProject({commit}, payload) {
   return new Promise((res, rej) => {
     this._vm.$axios.delete('/projects/' + payload,

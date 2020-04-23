@@ -92,13 +92,13 @@ export default {
       })
     },
     getSelectedTaskGroup () {
-      return this.groups.filter(item => item.id === this.selectedTask.groupId)[0].name
+      return this.groups.filter(item => item.id === parseInt(this.selectedTask.group_id))[0].name
     },
     getSelectedLabel () {
-      return this.priorityList.filter(item => item.id === this.selectedTask.priority_id)[0].name
+      return this.priorityList.filter(item => item.id === parseInt(this.selectedTask.priority_id))[0].name
     },
     getSelectedLabelColor () {
-      return this.priorityList.filter(item => item.id === this.selectedTask.priority_id)[0].color
+      return this.priorityList.filter(item => item.id === parseInt(this.selectedTask.priority_id))[0].color
     }
   }
 }

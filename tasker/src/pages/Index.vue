@@ -16,7 +16,7 @@
         <q-card class="cursor-pointer q-ma-md" :style="'background-color:' + proj.color_code" flat bordered
                 @click="sendMe(proj.id)">
           <q-card-section class="text-center">
-            <span class="text-weight-bold text-h6 text-white">{{proj.name}}</span> <br/> <br/> <br/>
+            <span class="text-weight-bold text-h6">{{proj.name}}</span> <br/> <br/> <br/>
           </q-card-section>
         </q-card>
       </div>
@@ -97,9 +97,10 @@ export default {
       data: [1, 2, 3],
       icon: false,
       project: {
-        owner_id: 5,
+        owner_id: 1,
         name: '',
         description: '',
+        is_completed: 0,
         color_code: '#027be3',
         deadline: ''
       },
@@ -128,6 +129,7 @@ export default {
     updateProjects () {
       this.getProjects('asd').then(response => {
         this.projects = response.data
+        console.log(this.projects)
       }).catch(error => {
         console.log(error)
       })
