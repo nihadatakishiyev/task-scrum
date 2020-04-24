@@ -11,7 +11,19 @@ export function createProject ({ commit }, payload) {
         })
   })
 }
-
+export function updateProject ({ commit }, payload) {
+  return new Promise ((res, rej) => {
+    this._vm.$axios.put('/projects/' + payload.id,
+      payload
+    )
+      .then(function (response) {
+        res(response)
+      })
+      .catch(function (error) {
+        rej(error.response)
+      })
+  })
+}
 export function getProjects({commit}, payload) {
   return new Promise((res, rej) => {
      this._vm.$axios.get('/projects',

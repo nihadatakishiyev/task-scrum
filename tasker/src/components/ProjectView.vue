@@ -4,6 +4,7 @@
     <q-scroll-area
       horizontal
       style="height: 500px; width: 100%"
+      visible
     >
       <div class="drag-container row no-wrap" v-drag-and-drop:options="options">
         <div class="col " v-for="group in groups" :key="group.id" >
@@ -97,7 +98,8 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <TaskView :openTask.sync="openTask" :selectedTask="selectedTask"/>
+    <TaskView :openTask.sync="openTask" :selectedTask="selectedTask" v-on:taskDeleted="getCurrentProject"
+    v-on:editProject="getCurrentProject"/>
   </div>
 </template>
 
@@ -194,7 +196,9 @@ export default {
       this.getProject(this.currentID).then(response => {
         this.$q.loading.hide()
         this.currentProject = response.data[0]
-        this.tasks = response.data[0].tasks
+        this.tasks = response.data[0].tasks.sort( function (a, b) {
+          return b.created_at < a.created_at ? -1 : 1
+        })
       }).catch(error => {
         this.$q.loading.hide()
         console.log(error)

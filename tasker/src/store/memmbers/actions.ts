@@ -1,6 +1,6 @@
-export function createTask({commit}, payload) {
-  return new Promise ((res, rej) => {
-    this._vm.$axios.post('/tasks',
+export function searchMemmber({commit}, payload) {
+  return new Promise((res, rej) => {
+    this._vm.$axios.get('/users?q=' + payload,
       payload
     )
       .then(function (response) {
@@ -11,9 +11,9 @@ export function createTask({commit}, payload) {
       })
   })
 }
-export function updateTask({commit}, payload) {
-  return new Promise ((res, rej) => {
-    this._vm.$axios.put('/tasks/' + payload.id,
+export function getMemmbers({commit}, payload) {
+  return new Promise((res, rej) => {
+    this._vm.$axios.get('/ups' + payload,
       payload
     )
       .then(function (response) {
@@ -24,9 +24,9 @@ export function updateTask({commit}, payload) {
       })
   })
 }
-export function deleteTask({commit}, payload) {
-  return new Promise ((res, rej) => {
-    this._vm.$axios.delete('/tasks/' + payload.id,
+export function addMemmber({commit}, payload) {
+  return new Promise((res, rej) => {
+    this._vm.$axios.post('/ups',
       payload
     )
       .then(function (response) {
@@ -37,4 +37,3 @@ export function deleteTask({commit}, payload) {
       })
   })
 }
-

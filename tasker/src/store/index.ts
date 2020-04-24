@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 // import exampleState from './module-example/state'
 import auth from './auth'
 import tasks from './tasks'
+import memmbers from './memmbers'
 import comments from './comments'
 import projects from './projects'
 
@@ -28,7 +29,8 @@ export default store(function ({ Vue }) {
       auth,
       comments,
       projects,
-      tasks
+      tasks,
+      memmbers
     },
 
     // enable strict mode (adds overhead!)
