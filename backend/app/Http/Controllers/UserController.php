@@ -18,8 +18,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return UserResource::collection($users);
+        if(request()->query('q')){
+            $users = User::where('name', 'like', ('%' .request()->query('q').'%'))->get();
+            return UserResource::collection($users);
+        }else{
+            $users = User::all();
+            return UserResource::collection($users);
+        }
     }
 
     public function update(Request $request, $id) {
