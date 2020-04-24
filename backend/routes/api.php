@@ -30,3 +30,5 @@ Route::post('/login', 'auth\LoginController@login');
 Route::post('/register', 'auth\RegisterController@register');
 
 Route::middleware('auth:api')->get('/details', 'UserController@details');
+
+Route::get('/user/{id}/deadlines', 'UserController@deadlines');
