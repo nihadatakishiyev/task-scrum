@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Http\Resources\Task as TaskResource;
 use App\Project;
 use App\Task;
@@ -37,6 +38,11 @@ class TaskController extends Controller
         $task->project_id = $request->input('project_id');
         $task->label = $request->input('label');
 
+        ActivityLog::create([
+            'owner_id' => $task->owner_id,
+            'action_name' => 'Updated Task'
+        ])->save();
+
         if($task->save()){
             return new TaskResource($task);
         }
@@ -63,6 +69,11 @@ class TaskController extends Controller
         $task->priority_id = $request->input('priority_id');
         $task->project_id = $request->input('project_id');
         $task->label = $request->input('label');
+
+        ActivityLog::create([
+            'owner_id' => $task->owner_id,
+            'action_name' => 'Created Task'
+        ])->save();
 
         if($task->save()){
             return new TaskResource($task);
@@ -93,6 +104,11 @@ class TaskController extends Controller
     public function destroy($id)
     {
         $task = Task::findOrFail($id);
+
+        ActivityLog::create([
+            'owner_id' => $task->owner_id,
+            'action_name' => 'Deleted Task'
+        ])->save();
 
         if($task->delete()){
             return new TaskResource($task);

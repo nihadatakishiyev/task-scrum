@@ -20,4 +20,8 @@ class Project extends Model
     public function owner() {
         return $this->belongsTo('App\User', 'owner_id');
     }
+
+    public function ups() {
+        return $this->hasMany('App\UserPermission', 'project_id');
+    }
 }

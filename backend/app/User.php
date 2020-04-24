@@ -58,4 +58,9 @@ class User extends Authenticatable
     public function comments() {
         return $this->hasMany('App\Comment', 'commenter_id');
     }
+
+    public function ups() {
+        return $this->hasMany('App\UserPermission', 'user_id');
+    }
+
 }

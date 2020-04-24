@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Http\Resources\Project as ProjectResource;
 use App\Project;
 use Illuminate\Http\Request;
@@ -31,6 +32,11 @@ class ProjectController extends Controller
         $project->is_completed = $request->input('is_completed');
         $project->deadline = $request->input('deadline');
 
+        ActivityLog::create([
+            'owner_id' => $project->owner_id,
+            'action_name' => 'Updated Project'
+        ])->save();
+
         if($project->save()){
             return new ProjectResource($project);
         }
@@ -53,6 +59,11 @@ class ProjectController extends Controller
         $project->is_completed = $request->input('is_completed');
         $project->deadline = $request->input('deadline');
 
+        ActivityLog::create([
+            'owner_id' => $project->owner_id,
+            'action_name' => 'Created Project'
+        ])->save();
+
         if($project->save()){
             return new ProjectResource($project);
         }
@@ -69,7 +80,7 @@ class ProjectController extends Controller
 //        $project = Project::with('owner','tasks', 'tasks.comments')->where('id', $id)->get();
         $project = Project::with(['tasks' => function($query){
             $query->withCount('comments');
-        }, 'owner'])->where('id', $id)->get();
+        }, 'tasks.user', 'owner', 'ups.user'])->where('id', $id)->get();
 
         return new ProjectResource($project);
     }
@@ -83,6 +94,11 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::findOrFail($id);
+
+        ActivityLog::create([
+            'owner_id' => $project->owner_id,
+            'action_name' => 'Deleted Project'
+        ])->save();
 
         if ($project->delete()){
             return new ProjectResource($project);
