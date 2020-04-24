@@ -7,6 +7,7 @@ namespace App\Http\Controllers\auth;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -17,7 +18,9 @@ class RegisterController extends Controller
            'password' => 'required'
         ]);
 
-        $user = User::create($validated);
+        $request->merge(['password' => bcrypt($request->password)]);
+
+        $user = User::create($request->all());
 
         $accessToken = $user->createToken('authToken')->accessToken;
 

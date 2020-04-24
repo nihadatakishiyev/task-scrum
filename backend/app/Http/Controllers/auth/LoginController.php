@@ -15,8 +15,8 @@ class LoginController extends Controller
            'password' => 'required|string'
         ]);
 
-        if( !Auth::attempt($login)){
-            return response(['message' => 'Invalid login credentials']);
+        if( !Auth::attempt($request->all())){
+            return response(['message' => 'Invalid login credentials'], 401);
         }
 
         $accessToken = Auth::user()->createToken('authToken')->accessToken;
