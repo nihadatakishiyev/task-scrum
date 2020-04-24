@@ -32,5 +32,19 @@ class GroupSeeder extends Seeder
                 'place'=> 3
             ]
         );
+
+        DB::table('groups')->insert(
+            [
+                'name'=> 'On Hold',
+                'place'=> 4
+            ]
+        );
+
+        DB::table('groups')->insert(
+            [
+                'name'=> 'Testing',
+                'place'=> 5
+            ]
+        );
     }
 }
