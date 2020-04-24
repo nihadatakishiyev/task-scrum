@@ -38,6 +38,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { date } from 'quasar'
 import { mapActions } from 'vuex'
+import { LocalStorage } from 'quasar';
 export default {
   name: 'CommentView',
   props: ['task'],
@@ -46,7 +47,7 @@ export default {
       comment: {
         content: '',
         task_id: this.task.id,
-        commenter_id: 3,
+        commenter_id: LocalStorage.getItem('user').id,
         is_deleted: 0
       },
       comments: []
@@ -75,6 +76,7 @@ export default {
       this.createComment(this.comment).then(response => {
         this.comment.task_id = this.task.id
         this.comment.content = null
+        this.$root.$emit('commentMade')
         this.getComments2()
         console.log(response)
       }).catch(error => {

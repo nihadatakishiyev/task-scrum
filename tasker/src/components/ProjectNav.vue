@@ -60,7 +60,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple @click="isEdit = !isEdit">
+          <q-item clickable v-ripple @click="isEdit = !isEdit" v-if="user.id === parseInt(project.owner_id)">
             <q-item-section avatar>
               <q-icon color="green" name="edit" />
             </q-item-section>
@@ -71,7 +71,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple @click="delete2 = !delete2">
+          <q-item clickable v-ripple @click="delete2 = !delete2" v-if="user.id === parseInt(project.owner_id)">
             <q-item-section avatar>
               <q-icon color="red" name="delete" />
             </q-item-section>
@@ -83,20 +83,33 @@
             </q-item-section>
           </q-item>
           <q-item-label header class="text-center"> <span class="text-weight-bold">Members</span> <q-space/></q-item-label>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple >
+            <q-item-section avatar>
+              <q-avatar  size="32px">
+                <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
+              </q-avatar>
+            </q-item-section>
+            <q-item-section v-if="project.owner">
+              <q-item-label>{{project.owner.name}}</q-item-label>
+              <q-item-label caption v-if="project.owner.email">
+                {{project.owner.email}}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-for="(up, index) in filterUps" :key="index">
             <q-item-section avatar>
               <q-avatar  size="32px">
                 <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
               </q-avatar>
             </q-item-section>
             <q-item-section>
-              <q-item-label>Ogtay Huseynov</q-item-label>
+              <q-item-label>{{up.user.name}}</q-item-label>
               <q-item-label caption>
-                okkkkkk@ok.ok
+                {{up.user.email}}
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple @click="openAdd.bool = !openAdd.bool">
+          <q-item clickable v-ripple @click="openAdd.bool = !openAdd.bool" v-if="user.id === parseInt(project.owner_id)">
             <q-item-section avatar>
               <q-avatar  size="32px">
                 <q-icon color="red" name="add" />
@@ -194,7 +207,7 @@ import { mapActions } from 'vuex'
 import AddUser from './AddUser'
 export default {
   components: { AddUser },
-  props: ['project'],
+  props: ['project', 'user'],
   name: 'ProjectNav',
   data () {
     return {
@@ -229,11 +242,19 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-    }
+    },
+
   },
   computed: {
     formatDates () {
       return timeStamp => date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    },
+    filterUps () {
+      if (this.project.ups) {
+        return this.project.ups.filter(item => parseInt(item.accept_status) === 1)
+      } else {
+        return []
+      }
     }
   }
 }

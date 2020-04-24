@@ -7,6 +7,7 @@ import auth from './auth'
 import tasks from './tasks'
 import memmbers from './memmbers'
 import comments from './comments'
+import users from './users'
 import projects from './projects'
 
 /*
@@ -28,6 +29,7 @@ export default store(function ({ Vue }) {
       // example
       auth,
       comments,
+      users,
       projects,
       tasks,
       memmbers

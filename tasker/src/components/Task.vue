@@ -12,7 +12,7 @@
         </q-avatar>
         <q-btn dense round size="22px" flat icon="message" color="primary" class=" float-right">
           <q-badge color="primary" floating transparent>
-            4
+            {{task.comments_count}}
           </q-badge>
         </q-btn>
       </div>

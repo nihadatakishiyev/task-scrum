@@ -64,10 +64,13 @@ export default {
     ...mapActions('memmbers', ['searchMemmber', 'addMemmber']),
     addMemmber2 () {
       if (this.model) {
+        console.log(this.model)
         this.permission.user_id = this.model.id
+        this.permission.project_id = this.project.id
         this.addMemmber(this.permission).then(response => {
           this.openAdd.bool = false
           this.$emit('userAdd')
+          this.$root.$emit('commentMade')
           console.log(response)
         }).catch(error => {
           this.openAdd.bool = false

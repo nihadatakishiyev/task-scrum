@@ -1,8 +1,10 @@
 <template>
   <q-page class="q-ma-md">
-    <div class="row"><div class="col text-center">
-      <span class="text-weight-medium text-h4 ">All Projects</span>
-    </div></div>
+    <div class="row">
+      <div class="col text-center">
+        <span class="text-weight-medium text-h4 ">All Projects</span>
+      </div>
+    </div>
     <div class="row q-col-gutter-y-m">
       <div class="col col-xs-12 col-sm-6 col-md-3">
         <q-card class="cursor-pointer q-ma-md" @click="icon = true" flat bordered>
@@ -13,7 +15,8 @@
         </q-card>
       </div>
       <div class="col col-xs-12 col-sm-6 col-md-3" v-for="(proj, index) in projects" :key="index">
-        <q-card class="cursor-pointer q-ma-md" :style="'border-radius: 5px; border-bottom: 5px solid ' + proj.color_code" flat bordered
+        <q-card class="cursor-pointer q-ma-md"
+                :style="'border-radius: 5px; border-bottom: 5px solid ' + proj.color_code" flat bordered
                 @click="sendMe(proj.id)">
           <q-card-section class="text-center">
             <span class="text-weight-bold text-h6">{{proj.name}}</span> <br/> <br/> <br/>
@@ -25,62 +28,62 @@
       <q-card style="min-width: 250px; width: 450px">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Create Project</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
+          <q-space/>
+          <q-btn icon="close" flat round dense v-close-popup/>
         </q-card-section>
 
         <q-card-section>
           <q-form @submit.prevent="cProject">
-          <q-input outlined v-model="project.name" label="Name" required />
-          <q-input
-            v-model="project.description"
-            outlined
-            class="q-pt-sm"
-            label="Description"
-            type="textarea"
-            required
-          ></q-input>
+            <q-input outlined v-model="project.name" label="Name" required/>
+            <q-input
+              v-model="project.description"
+              outlined
+              class="q-pt-sm"
+              label="Description"
+              type="textarea"
+              required
+            ></q-input>
 
-          <q-input
-            outlined
-            label="Color Code of Project"
-            v-model="project.color_code"
-            :rules="['anyColor']"
-            class="my-input q-pt-sm"
-            required
-          >
-            <template v-slot:append>
-              <q-icon name="colorize" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-color v-model="project.color_code" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
+            <q-input
+              outlined
+              label="Color Code of Project"
+              v-model="project.color_code"
+              :rules="['anyColor']"
+              class="my-input q-pt-sm"
+              required
+            >
+              <template v-slot:append>
+                <q-icon name="colorize" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-color v-model="project.color_code"/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
 
-          <q-input outlined v-model="project.deadline" label="Optional Deadline" required>
-            <template v-slot:prepend>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-date v-model="project.deadline" mask="YYYY-MM-DD HH:mm" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
+            <q-input outlined v-model="project.deadline" label="Optional Deadline" required>
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-date v-model="project.deadline" mask="YYYY-MM-DD HH:mm"/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
 
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-time v-model="project.deadline" mask="YYYY-MM-DD HH:mm" format24h />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-          <q-btn label="Create Project" type="submit" icon="add" :loading="load" class="full-width q-mt-md" color="primary"></q-btn>
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-time v-model="project.deadline" mask="YYYY-MM-DD HH:mm" format24h/>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+            <q-btn label="Create Project" type="submit" icon="add" :loading="load" class="full-width q-mt-md"
+                   color="primary"></q-btn>
           </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
-
 
   </q-page>
 </template>
@@ -89,6 +92,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { mapActions } from 'vuex'
+import { LocalStorage } from 'quasar'
 
 export default {
   name: 'PageIndex',
@@ -96,6 +100,7 @@ export default {
     return {
       data: [1, 2, 3],
       icon: false,
+      user: null,
       project: {
         owner_id: 1,
         name: '',
@@ -105,7 +110,7 @@ export default {
         deadline: ''
       },
       projects: [],
-      load: false,
+      load: false
     }
   },
   methods: {
@@ -115,6 +120,7 @@ export default {
     },
     cProject () {
       this.load = true
+      this.project.owner_id = this.user.id
       this.createProject(this.project).then(response => {
         this.load = false
         this.icon = false
@@ -129,9 +135,25 @@ export default {
     updateProjects () {
       this.$q.loading.show()
       this.getProjects('asd').then(response => {
-        this.projects = response.data.sort( function (a, b) {
+        this.user = response.data[0]
+        LocalStorage.set('user', this.user)
+        this.$root.$emit('updatenots')
+        this.projects = response.data[0].project
+        const ups = response.data[0].ups
+        if (ups) {
+          let index
+          for (index = 0; index < ups.length; index++) {
+            const nups = ups[index]
+            if (parseInt(nups["accept_status"]) === 1) {
+              console.log('ups--', nups)
+              this.projects.push(nups.project)
+            }
+          }
+        }
+        this.projects = this.projects.sort(function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
+
         this.$q.loading.hide()
       }).catch(error => {
         this.$q.loading.hide()
@@ -141,6 +163,14 @@ export default {
   },
   created () {
     this.updateProjects()
+    this.$root.$on('updateProject', () => {
+      this.updateProjects()
+    })
+  },
+  beforeDestroy () {
+    this.$root.$off('updateProject', () => {
+      this.updateProjects()
+    })
   }
 }
 </script>
