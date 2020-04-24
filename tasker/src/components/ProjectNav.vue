@@ -11,7 +11,7 @@
       :width="350"
       side="right" overlay bordered behavior="desktop"
       :breakpoint="500"
-      :content-style="{ backgroundColor: '#eef2f3' }"
+      :content-style="{ backgroundColor: ($q.dark.isActive ? '#1D1D1D' :' #eef2f3') }"
     >
       <q-scroll-area class="fit">
         <q-list  >
@@ -40,12 +40,34 @@
           </q-item>
           <q-item clickable v-ripple>
             <q-item-section avatar>
+              <q-icon color="primary" name="timelapse" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Deadline</q-item-label>
+              <q-item-label caption>
+                {{formatDates(project.deadline)}}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
               <q-icon :style="'color:' + project.color_code" name="palette" />
             </q-item-section>
             <q-item-section>
               <q-item-label>Color</q-item-label>
               <q-item-label caption>
                 {{project.color_code}}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple @click="isEdit = !isEdit">
+            <q-item-section avatar>
+              <q-icon color="green" name="edit" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Edit Project</q-item-label>
+              <q-item-label caption>
+                Edit project properties.
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -74,6 +96,19 @@
               </q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple @click="openAdd.bool = !openAdd.bool">
+            <q-item-section avatar>
+              <q-avatar  size="32px">
+                <q-icon color="red" name="add" />
+              </q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Add User</q-item-label>
+              <q-item-label caption>
+                Add user to your project and give them permission.
+              </q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -90,23 +125,103 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="isEdit">
+      <q-card style="min-width: 250px; width: 450px">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Edit Project</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <q-form @submit.prevent="sProject">
+            <q-input outlined v-model="project.name" label="Name" required />
+            <q-input
+              v-model="project.description"
+              outlined
+              class="q-pt-sm"
+              label="Description"
+              type="textarea"
+              required
+            ></q-input>
+
+            <q-input
+              outlined
+              label="Color Code of Project"
+              v-model="project.color_code"
+              :rules="['anyColor']"
+              class="my-input q-pt-sm"
+              required
+            >
+              <template v-slot:append>
+                <q-icon name="colorize" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-color v-model="project.color_code" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+
+            <q-input outlined v-model="project.deadline" label="Optional Deadline" required>
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-date v-model="project.deadline" mask="YYYY-MM-DD HH:mm" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-time v-model="project.deadline" mask="YYYY-MM-DD HH:mm" format24h />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+            <q-btn label="Save Project" type="submit" icon="save" :loading="load" class="full-width q-mt-md" color="green"></q-btn>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <add-user :open-add="openAdd" :project="project"/>
   </div>
 </template>
 
-<script>import { mapActions } from 'vuex'
+<script>
+import { date } from 'quasar'
+import { mapActions } from 'vuex'
+import AddUser from './AddUser'
 export default {
+  components: { AddUser },
   props: ['project'],
   name: 'ProjectNav',
   data () {
     return {
+      openAdd: {
+        bool: false
+      },
       selected: null,
       delete2: false,
-      drawer: false
-
+      drawer: false,
+      isEdit: false,
+      load: false
     }
   },
   methods: {
-    ...mapActions('projects', ['deleteProject']),
+    ...mapActions('projects', ['deleteProject', 'updateProject']),
+    sProject () {
+      this.load = true
+      this.updateProject(this.project).then(response => {
+        this.load = false
+        this.$emit('editProject')
+        this.isEdit = false
+      }).catch(error => {
+        this.isEdit = false
+        this.load = false
+        console.log(error)
+      })
+    },
     deleteProj (id) {
       this.deleteProject(this.project.id).then(response => {
         console.log(response)
@@ -114,6 +229,11 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    }
+  },
+  computed: {
+    formatDates () {
+      return timeStamp => date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
     }
   }
 }

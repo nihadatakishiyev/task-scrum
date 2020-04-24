@@ -1,5 +1,6 @@
 import { LocalStorage } from 'quasar'
 import { boot } from 'quasar/wrappers'
+import { Dark } from 'quasar'
 
 export default boot(({ Vue }) => {
   const priorityList = [

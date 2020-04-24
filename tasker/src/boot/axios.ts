@@ -7,7 +7,20 @@ import axios from 'axios'
 const axiosInstance = axios.create({
   baseURL: 'http://api.yeddi.ml/api'
 })
+axiosInstance.interceptors.response.use(
+  response => successHandler(response),
+  error => errorHandler(error)
+)
+const errorHandler = (error) => {
+  if(error.statusCode) {
+    console.log(error.statusCode)
+  }
+  return Promise.reject({ ...error })
+}
 
+const successHandler = (response) => {
+  return response
+}
 // for use inside Vue files through this.$axios
 Vue.prototype.$axios = axiosInstance
 
