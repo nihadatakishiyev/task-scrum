@@ -10,6 +10,13 @@ use Illuminate\Routing\Controller;
 
 class ProjectController extends Controller
 {
+
+    public function __construct()
+    {
+//        $this->middleware('auth:api');
+
+        $this->middleware('testo')->only('show');
+    }
     /**
      * Display a listing of the resource.
      *
