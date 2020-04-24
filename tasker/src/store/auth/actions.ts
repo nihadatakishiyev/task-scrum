@@ -1,6 +1,6 @@
 export function login({commit}, payload) {
   return new Promise((res, rej) => {
-    this._vm.$axios.post('logi/',
+    this._vm.$axios.post('/login',
       payload
     )
       .then(function (response) {
@@ -14,7 +14,7 @@ export function login({commit}, payload) {
 
 export function register({commit}, payload) {
   return new Promise((res, rej) => {
-    this._vm.$axios.post('register/',
+    this._vm.$axios.post('/register',
       payload
     )
       .then(function (response) {
@@ -26,3 +26,12 @@ export function register({commit}, payload) {
   })
 }
 
+export function isLogged({commit}, payload) {
+  return new Promise((res, rej) => {
+    try {
+      res(payload)
+    } catch (e) {
+      rej(e)
+    }
+  })
+}

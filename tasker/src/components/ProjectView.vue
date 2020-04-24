@@ -1,13 +1,13 @@
 <template xmlns:v-drag-and-drop="http://www.w3.org/1999/xhtml">
   <div>
-    <ProjectNav :project="currentProject"/>
+    <ProjectNav :project="currentProject" :user="user"/>
     <q-scroll-area
       horizontal
       style="height: 500px; width: 100%"
       visible
     >
       <div class="drag-container row no-wrap" v-drag-and-drop:options="options">
-        <div class="col " v-for="group in groups" :key="group.id" >
+        <div class="col " v-for="(group, index) in groups" :key="index" >
           <q-card class="q-ma-md" flat >
             <div class="text-center text-weight-bold text-h5 q-pt-sm">
               <span>{{group.name}}</span>
@@ -17,7 +17,7 @@
               @click="taskd = !taskd; selected= group.id"></q-btn>
             </div>
             <q-card-section >
-              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 400px; width: 380px" v-if="tasks">
+              <q-scroll-area class="drag-inner-list scroll" :data-id="group.id" style="height: 350px; width: 380px" v-if="tasks">
                 <Task class="q-ma-xs  cursor-pointer drag-item"
                         v-for="(item, index) in filteredItems(group.id)"  :key="index"
                         :data-id="item.id" :task="item" v-on:openTask="selectMTask"
@@ -73,7 +73,33 @@
               </q-item>
             </template>
           </q-select>
-
+            <q-select
+              filled
+              class="q-mt-sm q-mb-sm"
+              hide-dropdown-icon
+              :option-value="(item) => item === null || item === undefined? '' : parseInt(item.user_id)"
+              :option-label="(item) => item === null || item === undefined? '' : item.user.name"
+              v-model="task.assigned_to_id"
+              emit-value
+              map-options
+              use-input
+              fill-input
+              label="Search for assignable user."
+              input-debounce="0"
+              :options="mmemmbers"
+              clearable
+              @filter="filterFn"
+              @filter-abort="abortFilterFn"
+              hint="Mininum 2 characters to trigger search"
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
           <q-input outlined v-model="task.deadline" label="Optional Deadline" class="q-pt-sm" required
           >
             <template v-slot:prepend>
@@ -122,15 +148,15 @@ export default {
       openTask: {
         bol: false
       },
+      mmemmbers: [],
       selectedTask: null,
       taskd: false,
       selected: '',
       priorityList: priorityList,
       task: {
-        id: '',
         name: '',
-        assigned_to_id: 1,
-        owner_id: 1,
+        assigned_to_id: null,
+        owner_id: LocalStorage.getItem('user').id,
         label: 'Programming',
         is_completed: 0,
         project_id: this.currentID,
@@ -139,7 +165,8 @@ export default {
         deadline: '',
         priority_id: 1
       },
-      groups: LocalStorage.getItem('gs'),
+      user: '',
+      groups: LocalStorage.has('gs') ? LocalStorage.getItem('gs') : [],
       tasks: [],
       options: {
         dropzoneSelector: '.drag-inner-list',
@@ -166,13 +193,26 @@ export default {
       this.task.project_id = this.currentID
       console.log(this.task)
       this.createTask(this.task).then(response => {
-        console.log(this.task.g)
         this.getCurrentProject()
         this.taskd = false
       }).catch(error => {
         this.taskd = false
         console.log(error)
       })
+    },
+    filterFn (val, update, abort) {
+      if (val.length < 2) {
+        abort()
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.mmemmbers.filter(item => item.user.name.includes(needle))
+      })
+    },
+    abortFilterFn (val) {
+      console.log(val)
     },
     selectMTask (task) {
       this.selectedTask = task
@@ -195,7 +235,10 @@ export default {
       this.$q.loading.show()
       this.getProject(this.currentID).then(response => {
         this.$q.loading.hide()
+        this.$root.$emit('updatenots')
         this.currentProject = response.data[0]
+        console.log(this.currentProject)
+        this.mmemmbers = response.data[0].ups.filter(val => parseInt(val.accept_status) === 1)
         this.tasks = response.data[0].tasks.sort( function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
@@ -207,7 +250,12 @@ export default {
   },
   created () {
     this.currentID = this.$route.params.projectID
+    this.user = LocalStorage.getItem('user')
     this.getCurrentProject()
+    this.$root.$on('commentMade', () => { this.getCurrentProject() })
+  },
+  beforeDestroy () {
+    this.$root.$off('commentMade', () => { this.getCurrentProject() })
   }
 }
 </script>

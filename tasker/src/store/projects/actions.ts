@@ -1,18 +1,20 @@
-export function createProject ({ commit }, payload) {
-  return new Promise ((res, rej) => {
+import { LocalStorage } from 'quasar'
+export function createProject({commit}, payload) {
+  return new Promise((res, rej) => {
     this._vm.$axios.post('/projects',
-        payload
-      )
-        .then(function (response) {
-          res(response)
-        })
-        .catch(function (error) {
-          rej(error.response)
-        })
+      payload
+    )
+      .then(function (response) {
+        res(response)
+      })
+      .catch(function (error) {
+        rej(error.response)
+      })
   })
 }
-export function updateProject ({ commit }, payload) {
-  return new Promise ((res, rej) => {
+
+export function updateProject({commit}, payload) {
+  return new Promise((res, rej) => {
     this._vm.$axios.put('/projects/' + payload.id,
       payload
     )
@@ -24,19 +26,22 @@ export function updateProject ({ commit }, payload) {
       })
   })
 }
+
 export function getProjects({commit}, payload) {
   return new Promise((res, rej) => {
-     this._vm.$axios.get('/projects',
-             payload
-           )
-             .then(function (response) {
-               res(response)
-             })
-             .catch(function (error) {
-               rej(error.response)
-             })
-  })
+      this._vm.$axios.get('/details'
+  )
+    .then(function (response) {
+      res(response)
+    })
+    .catch(function (error) {
+      rej(error.response)
+    })
 }
+
+)
+}
+
 export function getProject({commit}, payload) {
   return new Promise((res, rej) => {
     this._vm.$axios.get('/projects/' + payload,
@@ -50,6 +55,7 @@ export function getProject({commit}, payload) {
       })
   })
 }
+
 export function deleteProject({commit}, payload) {
   return new Promise((res, rej) => {
     this._vm.$axios.delete('/projects/' + payload,

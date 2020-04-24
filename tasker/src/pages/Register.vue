@@ -28,7 +28,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-
+import { LocalStorage } from 'quasar';
 export default {
   data () {
     return {
@@ -42,12 +42,23 @@ export default {
   methods: {
     ...mapActions('auth', ['register']),
     register2 () {
+      this.$q.loading.show()
+
       this.register(this.user).then(response => {
+        this.$q.loading.hide()
+        LocalStorage.set('access_token', response.data.access_token)
+        LocalStorage.set('user', response.data.user)
+        this.$axios.defaults.headers.common.Authorization = 'Bearer ' + response.data.access_token
+        this.$root.$emit('logged')
+        this.$router.push('/')
+        this.$forceUpdate()
         console.log(response)
       }).catch(error => {
+        this.$q.loading.hide()
         console.log(error)
       })
     }
-  }
+  },
+
 }
 </script>

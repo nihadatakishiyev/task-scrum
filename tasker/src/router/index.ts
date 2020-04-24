@@ -2,7 +2,7 @@ import { route } from 'quasar/wrappers'
 import VueRouter from 'vue-router'
 import { StoreInterface } from '../store'
 import routes from './routes'
-
+import { LocalStorage } from 'quasar';
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation
@@ -21,6 +21,13 @@ export default route<StoreInterface>(function ({ Vue }) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
-
+  Router.beforeEach((to, from, next) => {
+    if (to.meta.auth && LocalStorage.has('access_token')) {
+      next('/login')
+    }
+    else {
+      next()
+    }
+  })
   return Router
 })

@@ -1,6 +1,5 @@
 import { LocalStorage } from 'quasar'
 import { boot } from 'quasar/wrappers'
-import { Dark } from 'quasar'
 
 export default boot(({ Vue }) => {
   const priorityList = [
@@ -13,7 +12,9 @@ export default boot(({ Vue }) => {
   const groups = [
     { id: 1, name: 'To Do' },
     { id: 2, name: 'In Progress' },
-    { id: 3, name: 'Done' },
+    { id: 3, name: 'On Hold' },
+    { id: 4, name: 'Testing' },
+    { id: 5, name: 'Done' },
   ]
   LocalStorage.set('pl', priorityList)
   LocalStorage.set('gs', groups)

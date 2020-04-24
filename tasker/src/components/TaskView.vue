@@ -80,7 +80,7 @@
               </q-avatar>
             </q-item-section>
 
-            <q-item-section><span class="text-weight-bold">Ogtay Huseynov</span></q-item-section>
+            <q-item-section><span class="text-weight-bold">{{selectedTask.assigned_to.name}}</span></q-item-section>
           </q-item>
           <q-item >
             <q-item-section avatar>
