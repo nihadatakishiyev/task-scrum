@@ -31,7 +31,7 @@ Route::post('/register', 'auth\RegisterController@register');
 
 Route::middleware('auth:api')->get('/details', 'UserController@details');
 
-Route::get('/user/{id}/deadlines', 'UserController@deadlines');
+//Route::get('/user/{id}/deadlines', 'UserController@deadlines');
 
 //Route::middleware('auth:api')->group(function (){
 //    Route::resource('users', 'UserController');
@@ -43,5 +43,5 @@ Route::get('/user/{id}/deadlines', 'UserController@deadlines');
 //
 //    Route::get('/details', 'UserController@details');
 //
-//    Route::get('/user/{id}/deadlines', 'UserController@deadlines');
+////    Route::get('/user/{id}/deadlines', 'UserController@deadlines');
 //});

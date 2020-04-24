@@ -63,4 +63,8 @@ class User extends Authenticatable
         return $this->hasMany('App\UserPermission', 'user_id');
     }
 
+    public function als() {
+        return $this->hasMany('App\ActivityLog', 'owner_id');
+    }
+
 }
