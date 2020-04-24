@@ -6,7 +6,9 @@ use App\Http\Resources\User as UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use phpDocumentor\Reflection\Project;
 
 class UserController extends Controller
@@ -79,7 +81,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return UserResource
      */
     public function destroy($id)
     {
@@ -88,5 +90,11 @@ class UserController extends Controller
         if ($user->delete()) {
             return new UserResource($user);
         }
+    }
+
+    public function details(){
+        return User::with(['project', 'ups' => function($query){
+            return $query->where('accept_status', '!=', '2');
+        }, 'ups.project', 'ups.project.owner'])->where('id',Auth::id())->get();
     }
 }

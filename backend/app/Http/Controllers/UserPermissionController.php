@@ -33,7 +33,7 @@ class UserPermissionController extends Controller
 
         $up->user_id = $request->input('user_id');
         $up->project_id = $request->input('project_id');
-        $up->permission = $request->input('permission_type_id');
+        $up->permission_type_id = $request->input('permission_type_id');
         $up->accept_status = $request->input('accept_status');
 
         if ($up->save()) {
@@ -67,7 +67,7 @@ class UserPermissionController extends Controller
 
         $up->user_id = $request->input('user_id');
         $up->project_id = $request->input('project_id');
-        $up->permission = $request->input('permission_type_id');
+        $up->permission_type_id = $request->input('permission_type_id');
         $up->accept_status = $request->input('accept_status');
 
         if ($up->save()) {

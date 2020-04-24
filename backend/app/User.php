@@ -5,14 +5,16 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * @method static paginate(int $int)
  * @method static findOrFail(int $id)
+ * @method static create(array $validated)
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -56,4 +58,9 @@ class User extends Authenticatable
     public function comments() {
         return $this->hasMany('App\Comment', 'commenter_id');
     }
+
+    public function ups() {
+        return $this->hasMany('App\UserPermission', 'user_id');
+    }
+
 }
