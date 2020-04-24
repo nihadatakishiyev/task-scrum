@@ -70,11 +70,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
-//        $user->load('project');
-        $user->load('tasks');
+        $deadlines = DB::select('select id, name as \'task_name\' , deadline, \'task\' as type from tasks where owner_id ='. $id .
+            ' UNION select id, name as \'project_name\', deadline, \'project\' as type from projects where owner_id = ' . $id);
 
-    //    dd($user);
+        $user = User::with('tasks', 'als')->where('id', $id)->get();
+
+        $user->push('deadlines', $deadlines);
         return new UserResource($user);
     }
 
@@ -97,10 +98,5 @@ class UserController extends Controller
         return User::with(['project', 'ups' => function($query){
             return $query->where('accept_status', '!=', '2');
         }, 'ups.project', 'ups.project.owner'])->where('id',Auth::id())->get();
-    }
-
-    public function deadlines($id) {
-        return DB::select('select id, name as \'task_name\' , deadline, \'task\' as type from tasks where owner_id ='. $id .
-                     ' UNION select id, name as \'project_name\', deadline, \'project\' as type from projects where owner_id = ' . $id);
     }
 }

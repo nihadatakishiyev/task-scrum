@@ -12,4 +12,8 @@ class ActivityLog extends Model
     protected $fillable = [
       'action_name', 'owner_id'
     ];
+
+    public function owner() {
+        return $this->belongsTo('App\ActivityLog', 'owner_id');
+    }
 }
