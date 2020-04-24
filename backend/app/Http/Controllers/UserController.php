@@ -19,6 +19,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
+
+
     public function index()
     {
         if(request()->query('q')){
