@@ -22,7 +22,7 @@ class Task extends Model
     }
 
     public function assigned_to() {
-        return $this->belongsToMany('App\User', 'users');
+        return $this->belongsTo('App\User', 'assigned_to_id');
     }
 
     public function comments() {
