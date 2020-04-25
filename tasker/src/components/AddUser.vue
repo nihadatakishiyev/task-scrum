@@ -74,6 +74,12 @@ export default {
           console.log(response)
         }).catch(error => {
           this.openAdd.bool = false
+          this.$q.notify({
+            message: error.data.message,
+            color: 'orange',
+            icon: 'error',
+            position: 'top'
+          })
           console.log(error)
         })
       }

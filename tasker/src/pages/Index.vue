@@ -18,8 +18,30 @@
         <q-card class="cursor-pointer q-ma-md"
                 :style="'border-radius: 5px; border-bottom: 5px solid ' + proj.color_code" flat bordered
                 @click="sendMe(proj.id)">
-          <q-card-section class="text-center">
-            <span class="text-weight-bold text-h6">{{proj.name}}</span> <br/> <br/> <br/>
+          <q-card-section class="">
+            <div class="text-center">
+              <span class="text-weight-bold text-h5">{{proj.name}}</span> <br/>
+            </div>
+            <q-list >
+              <q-item >
+                <q-item-section avatar>
+                  <q-icon  name="person_outline" />
+                </q-item-section>
+
+                <q-item-section class="text-weight-bold">{{proj.owner.name}}</q-item-section>
+              </q-item>
+              <q-item >
+                <q-item-section avatar>
+                  <q-icon  name="timelapse" />
+                </q-item-section>
+
+                <q-item-section class="text-weight-bold">{{formatDates(proj.deadline)}}</q-item-section>
+              </q-item>
+            </q-list>
+            <!--<span class="text-weight-bold"><q-icon name="person_outline" size="2em"></q-icon>{{proj.owner.name}}</span> <br/>-->
+            <!--<span class="text-weight-bold text-body2">-->
+              <!--<q-icon name="timelapse" size="2em"></q-icon>-->
+              <!--{{formatDates(proj.deadline)}}</span> <br/>-->
           </q-card-section>
         </q-card>
       </div>
@@ -92,7 +114,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { mapActions } from 'vuex'
-import { LocalStorage } from 'quasar'
+import {date, LocalStorage} from 'quasar'
 
 export default {
   name: 'PageIndex',
@@ -117,6 +139,9 @@ export default {
     ...mapActions('projects', ['createProject', 'getProjects']),
     sendMe (key: string) {
       this.$router.push('/projects/' + key)
+    },
+    formatDates (timeStamp) {
+      return  date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm')
     },
     cProject () {
       this.load = true
@@ -153,7 +178,7 @@ export default {
         this.projects = this.projects.sort(function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
-
+        console.log(this.projects)
         this.$q.loading.hide()
       }).catch(error => {
         this.$q.loading.hide()

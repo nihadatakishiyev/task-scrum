@@ -65,7 +65,8 @@ module.exports = configure(function (ctx) {
       plugins: [
         'LocalStorage',
         'SessionStorage',
-        'Loading'
+        'Loading',
+        'Notify'
       ]
     },
 

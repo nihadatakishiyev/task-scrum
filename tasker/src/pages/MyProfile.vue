@@ -63,7 +63,30 @@
       </div>
       <div class="col col-xs-12 col-sm-2 col-md-3 gt-xs"></div>
     </div>
+    <q-dialog v-model="showing" >
+      <q-card style="min-width: 250px; width: 450px">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Deadlines to this Date</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
 
+        <q-card-section>
+          <q-list>
+            <div v-for="(da, idnex) in getCustomDate(date)" :key="idnex">
+              <q-item :to="'/projects/' + da.id" clickable >
+                <q-item-section avatar>
+                  <q-icon name="open_in_new"></q-icon>
+                </q-item-section>
+                <q-item-section>
+                  {{da.task_name}}
+                </q-item-section>
+              </q-item>
+            </div>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -79,7 +102,9 @@ export default {
       user: [],
       profile: [],
       als: [],
-      dds: []
+      allDate: [],
+      dds: [],
+      showing: false
     }
   },
   methods: {
@@ -91,7 +116,7 @@ export default {
       return date.formatDate(timeStamp, 'YYYY/MM/DD')
     },
     covertToDate2 (timeStamp) {
-      return date.formatDate(timeStamp, 'YYYY/MM/DD HH:MM')
+      return date.formatDate(timeStamp, 'YYYY/MM/DD HH:mm:ss')
     }
   },
   created () {
@@ -100,11 +125,23 @@ export default {
       this.als = response.data[0].als.sort( function (a, b) {
         return b.created_at < a.created_at ? -1 : 1
       })
+      this.allDate = response.data[2]
+      console.log(this.allDate)
       this.dds = response.data[2].map(a => this.covertToDate(a.deadline))
-      console.log(this.als)
     }).catch(error => {
       console.log(error)
     })
+  },
+  computed: {
+    getCustomDate () {
+      return val => this.allDate.filter(item => date.isSameDate(this.covertToDate(item.deadline), val))
+    }
+  },
+  watch: {
+    date: function (value) {
+      this.showing= true
+      console.log(value)
+    }
   }
 }
 </script>
