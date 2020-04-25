@@ -29,15 +29,24 @@ class UserPermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $up = new UserPermission;
+        $query = UserPermission::where([['user_id', $request->input('user_id')],
+            ['project_id', $request->input('project_id')]])->get()->isEmpty();
 
-        $up->user_id = $request->input('user_id');
-        $up->project_id = $request->input('project_id');
-        $up->permission_type_id = $request->input('permission_type_id');
-        $up->accept_status = $request->input('accept_status');
+        if (!$query){
+            return response(['message'=> 'User access to this project already exists'], 303);
+        }
+        else {
+            $up = new UserPermission;
 
-        if ($up->save()) {
-            return new UpResource($up);
+            $up->user_id = $request->input('user_id');
+            $up->project_id = $request->input('project_id');
+            $up->permission_type_id = $request->input('permission_type_id');
+            $up->accept_status = $request->input('accept_status');
+
+            if ($up->save()) {
+                return new UpResource($up);
+            }
+
         }
     }
 
