@@ -28,21 +28,21 @@ class GroupSeeder extends Seeder
 
         DB::table('groups')->insert(
             [
-                'name'=> 'Done',
+                'name'=> 'On Hold',
                 'place'=> 3
             ]
         );
 
         DB::table('groups')->insert(
             [
-                'name'=> 'On Hold',
+                'name'=> 'Testing',
                 'place'=> 4
             ]
         );
 
         DB::table('groups')->insert(
             [
-                'name'=> 'Testing',
+                'name'=> 'Done',
                 'place'=> 5
             ]
         );
