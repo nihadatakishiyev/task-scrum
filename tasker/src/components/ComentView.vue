@@ -12,17 +12,18 @@
       </q-form>
     </q-card-section>
     <q-card-section>
-      <div class="text-center">
-        <span class="text-weight-bold text-grey-14">Comments</span>
+      <div class="">
+        <q-icon name="comment" size="2em"></q-icon>&nbsp;
+        <span class="text-weight-bold text-grey-14 text-h6">Comments</span>
       </div>
       <div class="q-mt-sm-lg">
         <div v-for="(item, index) in comments" :key="index" class="q-mt-lg">
           <q-avatar  size="32px">
             <img src="https://cdn.shopify.com/s/files/1/0064/7636/5891/products/product-image-400926614_530x@2x.jpg?v=1573914706" />
           </q-avatar>
-          <span class="text-weight-bold text-grey-14"> {{item.commenter.name}}</span> &nbsp;&nbsp;
+          <span class="text-weight-bold"> {{item.commenter.name}}</span> &nbsp;&nbsp;
           <span class="text-weight-bold text-grey-14 float-right">{{formatDates(item.created_at)}}</span>
-          <q-card flat>
+          <q-card flat bordered class="q-mt-sm">
             <q-card-section>
               {{item.content}}
             </q-card-section>

@@ -50,7 +50,7 @@ export function getProject({commit}, payload) {
       .then(function (response) {
         res(response)
       })
-      .catch(function (error) {
+      .catch(error => {
         rej(error.response)
       })
   })
