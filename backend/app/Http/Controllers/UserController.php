@@ -97,7 +97,7 @@ class UserController extends Controller
     }
 
     public function details(){
-        return User::with(['project', 'ups' => function($query){
+        return User::with(['project', 'project.owner','ups' => function($query){
             return $query->where('accept_status', '!=', '2');
         }, 'ups.project', 'ups.project.owner'])->where('id',Auth::id())->get();
     }
