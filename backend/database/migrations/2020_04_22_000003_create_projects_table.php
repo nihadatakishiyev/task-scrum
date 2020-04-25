@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->foreignId('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->string('color_code');
             $table->boolean('is_completed');
             $table->timestamp('deadline');
