@@ -33,7 +33,7 @@ class UserPermissionController extends Controller
             ['project_id', $request->input('project_id')]])->get()->isEmpty();
 
         if (!$query){
-            return response(['message'=> 'User access to this project already exists'], 303);
+            return response(['message'=> 'User access to this project already exists'], 409);
         }
         else {
             $up = new UserPermission;
