@@ -72,7 +72,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $deadlines = DB::select('select id, name as \'task_name\' , deadline, \'task\' as type from tasks where owner_id ='. $id .
+        $deadlines = DB::select('select project_id as id, name as \'task_name\' , deadline, \'task\' as type from tasks where owner_id ='. $id .
             ' UNION select id, name as \'project_name\', deadline, \'project\' as type from projects where owner_id = ' . $id);
 
         $user = User::with('tasks', 'als')->where('id', $id)->get();
