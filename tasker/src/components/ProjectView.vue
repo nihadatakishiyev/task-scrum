@@ -1,5 +1,5 @@
 <template xmlns:v-drag-and-drop="http://www.w3.org/1999/xhtml">
-  <div>
+  <div class="full-height">
     <ProjectNav :project="currentProject" :user="user"/>
     <q-scroll-area
       horizontal
@@ -7,8 +7,8 @@
       visible
     >
       <div class="drag-container row no-wrap" v-drag-and-drop:options="options">
-        <div class="col " v-for="(group, index) in groups" :key="index" >
-          <q-card class="q-ma-md" flat >
+        <div class="col full-height" v-for="(group, index) in groups" :key="index" >
+          <q-card class="q-ma-md full-height" flat >
             <div class="text-center text-weight-bold text-h5 q-pt-sm">
               <span>{{group.name}}</span>
             </div>
@@ -56,6 +56,8 @@
             option-value="id"
             option-label="name"
             emit-value
+            :bg-color="getSelectedLabelColor(task.priority_id)"
+            label-color="white"
             map-options
             :options="priorityList"
             label="Choose Priority"
@@ -82,14 +84,11 @@
               v-model="task.assigned_to_id"
               emit-value
               map-options
-              use-input
               fill-input
               label="Search for assignable user."
               input-debounce="0"
               :options="mmemmbers"
               clearable
-              @filter="filterFn"
-              @filter-abort="abortFilterFn"
               hint="Mininum 2 characters to trigger search"
             >
               <template v-slot:no-option>
@@ -130,7 +129,7 @@
 </template>
 
 <script>
-/* eslint-disable @typescript-eslint/camelcase,camelcase */
+  /* eslint-disable @typescript-eslint/camelcase,camelcase,key-spacing */
 import ProjectNav from './ProjectNav'
 import { LocalStorage } from 'quasar'
 import Task from './Task'
@@ -193,6 +192,10 @@ export default {
       this.task.project_id = this.currentID
       console.log(this.task)
       this.createTask(this.task).then(response => {
+        this.task.description = ''
+        this.task.deadline = ''
+        this.task.name = ''
+        this.task.deadline = ''
         this.getCurrentProject()
         this.taskd = false
       }).catch(error => {
@@ -239,13 +242,22 @@ export default {
         this.currentProject = response.data[0]
         console.log(this.currentProject)
         this.mmemmbers = response.data[0].ups.filter(val => parseInt(val.accept_status) === 1)
-        this.tasks = response.data[0].tasks.sort( function (a, b) {
+        const nM = {
+          user_id : this.currentProject.owner_id,
+          user: this.currentProject.owner
+        }
+        this.mmemmbers.push(nM)
+        this.tasks = response.data[0].tasks.sort ( function (a, b) {
           return b.created_at < a.created_at ? -1 : 1
         })
+        console.log(this.mmemmbers)
       }).catch(error => {
         this.$q.loading.hide()
         console.log(error)
       })
+    },
+    getSelectedLabelColor (id) {
+      return this.priorityList.filter(item => item.id === id)[0].color
     }
   },
   created () {

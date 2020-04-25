@@ -44,16 +44,16 @@ const routes: RouteConfig[] = [
           }
         })
       },
-      {
-        path: '/profile/:profile', component: () => import('pages/Profile.vue'),
-        beforeEnter: ((to, from, next) => {
-          if (!LocalStorage.has('access_token')) {
-            next('/login')
-          }else{
-            next()
-          }
-        })
-      },
+      // {
+      //   path: '/profile/:profile', component: () => import('pages/Profile.vue'),
+      //   beforeEnter: ((to, from, next) => {
+      //     if (!LocalStorage.has('access_token')) {
+      //       next('/login')
+      //     }else{
+      //       next()
+      //     }
+      //   })
+      // },
       {
         path: '/profile', component: () => import('pages/MyProfile.vue'),
         beforeEnter: ((to, from, next) => {

@@ -122,7 +122,7 @@ export default {
   created () {
     this.user = LocalStorage.getItem('user')
     this.getUserProfile(this.user.id).then(response => {
-      this.als = response.data[0].als.sort( function (a, b) {
+      this.als = response.data[0].als.sort(function (a, b) {
         return b.created_at < a.created_at ? -1 : 1
       })
       this.allDate = response.data[2]
@@ -139,7 +139,7 @@ export default {
   },
   watch: {
     date: function (value) {
-      this.showing= true
+      this.showing = true
       console.log(value)
     }
   }
